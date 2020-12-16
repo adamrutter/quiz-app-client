@@ -1,4 +1,5 @@
 import { colors } from "./colors"
+import { components } from "./components"
 import { extendTheme } from "@chakra-ui/react"
 import { families, sizes, weights, textStyles } from "./fonts"
 import { global } from "./global"
@@ -11,6 +12,7 @@ export const theme = extendTheme({
   fontWeights: weights,
   space,
   textStyles,
+  components,
   styles: {
     global
   }
