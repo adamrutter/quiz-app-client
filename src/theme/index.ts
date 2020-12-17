@@ -15,5 +15,8 @@ export const theme = extendTheme({
   components,
   styles: {
     global
+  },
+  shadows: {
+    outline: `0 0 0 3px ${colors.brand["200"]}e1`
   }
 })
