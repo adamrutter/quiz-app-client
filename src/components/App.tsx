@@ -5,6 +5,7 @@ import { QuizProvider } from "../contexts/QuizContext"
 import { SocketIOProvider } from "../contexts/SocketIOContext"
 import { UserProvider } from "../contexts/UserContext"
 import React from "react"
+import { Main } from "./App/Main"
 import { theme } from "../theme"
 import { Header } from "./App/Header"
 
@@ -16,6 +17,7 @@ export const App = () => (
           <PartyProvider>
             <QuizProvider>
               <Header />
+              <Main />
             </QuizProvider>
           </PartyProvider>
         </UserProvider>
