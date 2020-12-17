@@ -6,6 +6,7 @@ import { SocketIOProvider } from "../contexts/SocketIOContext"
 import { UserProvider } from "../contexts/UserContext"
 import React from "react"
 import { theme } from "../theme"
+import { Header } from "./App/Header"
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -13,7 +14,9 @@ export const App = () => (
       <SocketIOProvider>
         <UserProvider>
           <PartyProvider>
-            <QuizProvider></QuizProvider>
+            <QuizProvider>
+              <Header />
+            </QuizProvider>
           </PartyProvider>
         </UserProvider>
       </SocketIOProvider>
