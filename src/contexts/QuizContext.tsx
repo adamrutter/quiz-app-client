@@ -6,7 +6,7 @@ interface Props {
   children?: ReactNode
 }
 
-export const Quiz = createContext("")
+export const Quiz = createContext<string | undefined>("")
 
 export const QuizProvider = (props: Props) => {
   const [cookies, setCookie] = useCookies(["quiz-id"])

@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react"
 import { BrandIcon } from "../../shared/BrandIcon"
 import { OptionsRadioCard } from "./OptionsForm/OptionsRadioCard"
+import { Party } from "contexts/PartyContext"
 import { Socket } from "socket.io-client"
 import { SocketIO } from "contexts/SocketIOContext"
 import axios from "axios"
@@ -81,13 +82,16 @@ const getCategories = async () => {
 const submitForm = (
   e: React.FormEvent<HTMLFormElement>,
   socket: Socket,
+  partyId: string,
   options: QuizOptions
 ) => {
   e.preventDefault()
-  socket.emit("start-quiz", options)
+  socket.emit("start-quiz", { partyId, options })
 }
 
 export const OptionsForm = () => {
+  const partyId = useContext(Party)
+
   // The socket.io client
   const socket = useContext(SocketIO)
 
@@ -128,7 +132,7 @@ export const OptionsForm = () => {
   return (
     <form
       onSubmit={e =>
-        submitForm(e, socket, {
+        submitForm(e, socket, partyId, {
           category: categoryValue,
           amount: amountValue,
           difficulty: difficultyValue.toString(),
