@@ -3,7 +3,7 @@ import { components } from "./components"
 import { extendTheme } from "@chakra-ui/react"
 import { families, sizes, weights, textStyles } from "./fonts"
 import { global } from "./global"
-import { space } from "./layout"
+import { breakpoints, space } from "./layout"
 
 export const theme = extendTheme({
   colors,
@@ -18,5 +18,6 @@ export const theme = extendTheme({
   },
   shadows: {
     outline: `0 0 0 3px ${colors.brand["200"]}e1`
-  }
+  },
+  breakpoints
 })
