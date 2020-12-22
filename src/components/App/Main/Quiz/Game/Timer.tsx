@@ -1,6 +1,6 @@
 import { Badge, Box, HStack, useColorMode } from "@chakra-ui/react"
 import { SocketIO } from "contexts/SocketIOContext"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 export const Timer = () => {
   const socket = useContext(SocketIO)
@@ -14,7 +14,9 @@ export const Timer = () => {
 
   // Handle a timer update from the socket.io server
   const [time, setTime] = useState(10)
-  socket.on("timer-update", (time: string) => setTime(parseInt(time)))
+  useEffect(() => {
+    socket.on("timer-update", (time: string) => setTime(parseInt(time)))
+  }, [socket])
 
   return (
     <HStack spacing={2}>
