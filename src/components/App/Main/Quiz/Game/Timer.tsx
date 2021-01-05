@@ -13,10 +13,18 @@ export const Timer = () => {
   }
 
   // Handle a timer update from the socket.io server
-  const [time, setTime] = useState(10)
+  const [time, setTime] = useState(0)
   useEffect(() => {
-    socket.on("timer-update", (time: string) => setTime(parseInt(time)))
-  }, [socket])
+    const listener = (time: string) => {
+      setTime(parseInt(time))
+    }
+
+    socket.on("timer-update", listener)
+
+    return () => {
+      socket.off("timer-update", listener)
+    }
+  }, [socket, time])
 
   return (
     <HStack spacing={2}>
