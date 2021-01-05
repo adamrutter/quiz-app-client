@@ -58,6 +58,17 @@ export const ReadyPrompt = (props: Props) => {
     }
   }, [])
 
+  useEffect(() => {
+    const listener = (percent: number) => {
+      setUsersReady([])
+      setPercentUsersReady(0)
+    }
+    socket.on("all-users-ready", listener)
+    return () => {
+      socket.off("all-users-ready", listener)
+    }
+  }, [])
+
   const { onClose } = useDisclosure()
 
   return (
