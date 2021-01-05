@@ -74,7 +74,7 @@ export const ReadyPrompt = (props: Props) => {
   return (
     <Modal isOpen={props.isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent mx={2}>
         <ModalBody>
           <Flex alignItems="center" direction="column" px={5} py={9}>
             {usersReady.length === 0 ? (
