@@ -9,11 +9,15 @@ interface Props {
 export const Quiz = createContext<string | undefined>("")
 
 export const QuizProvider = (props: Props) => {
-  const [cookies, setCookie] = useCookies(["quiz-id"])
+  const [cookies, setCookie, removeCookie] = useCookies(["quiz-id"])
   const socket = useContext(SocketIO)
 
   socket.on("new-quiz-id", (id: string) => {
     setCookie("quiz-id", id)
+  })
+
+  socket.on("quiz-finished", () => {
+    removeCookie("quiz-id")
   })
 
   return (
