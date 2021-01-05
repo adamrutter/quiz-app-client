@@ -13,7 +13,7 @@ import { Party } from "contexts/PartyContext"
 import { Socket } from "socket.io-client"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User as UserId } from "contexts/UserContext"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 interface Props {
   isOpen: boolean
@@ -41,10 +41,22 @@ export const ReadyPrompt = (props: Props) => {
   // Handle user ready, waiting for other users to be ready
   const [usersReady, setUsersReady] = useState<Array<User>>([])
   const [percentUsersReady, setPercentUsersReady] = useState(0)
-  socket.on("these-users-ready", (users: Array<User>) => setUsersReady(users))
-  socket.on("percent-users-ready", (percent: number) =>
-    setPercentUsersReady(percent)
-  )
+
+  useEffect(() => {
+    const listener = (users: Array<User>) => setUsersReady(users)
+    socket.on("these-users-ready", listener)
+    return () => {
+      socket.off("these-users-ready", listener)
+    }
+  }, [])
+
+  useEffect(() => {
+    const listener = (percent: number) => setPercentUsersReady(percent)
+    socket.on("percent-users-ready", listener)
+    return () => {
+      socket.off("percent-users-ready", listener)
+    }
+  }, [])
 
   const { onClose } = useDisclosure()
 
