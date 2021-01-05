@@ -5,6 +5,7 @@ import React from "react"
 interface Props {
   amountOfQuestions: string
   currentQuestionNumber: string
+  time: number
 }
 
 export const Header = (props: Props) => {
@@ -25,7 +26,7 @@ export const Header = (props: Props) => {
             </Box>
           </Box>
         </HStack>
-        <Timer />
+        <Timer time={props.time} />
       </Flex>
       <Divider mt={4} />
     </>
