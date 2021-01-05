@@ -1,3 +1,4 @@
+import { Game } from "./Quiz/Game"
 import { OptionsForm } from "./Quiz/OptionsForm"
 import { Quiz as QuizId } from "contexts/QuizContext"
 import { ReadyPrompt } from "./Quiz/ReadyPrompt"
@@ -16,7 +17,7 @@ export const Quiz = () => {
   return (
     <>
       <ReadyPrompt isOpen={readyPromptOpen} />
-      {quizId ? <>Quiz</> : <OptionsForm />}
+      {quizId ? <Game /> : <OptionsForm />}
     </>
   )
 }
