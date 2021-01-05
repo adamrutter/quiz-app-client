@@ -1,10 +1,10 @@
 import { Badge, Box, Divider, Flex, HStack } from "@chakra-ui/react"
-import React from "react"
 import { Timer } from "./Timer"
-import { Question } from "../Game"
+import React from "react"
 
 interface Props {
-  question: Question
+  amountOfQuestions: string
+  currentQuestionNumber: string
 }
 
 export const Header = (props: Props) => {
@@ -17,10 +17,11 @@ export const Header = (props: Props) => {
               Question
             </Badge>{" "}
             <Box as="span" fontWeight="bold">
-              {props.question.number + 1}
+              {props.currentQuestionNumber}
             </Box>
             <Box as="span" color="gray.500" fontSize="xs">
-              /{props.question.total}
+              {" "}
+              of {props.amountOfQuestions}
             </Box>
           </Box>
         </HStack>
