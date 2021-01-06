@@ -109,7 +109,7 @@ export const Game = () => {
     const isSelectedAnswer = selectedAnswer !== undefined
     if (isSelectedAnswer) {
       socket.emit(
-        "answer",
+        `answer-${quizId}-${currentQuestion?.number}`,
         // @ts-ignore
         currentAnswers[selectedAnswer],
         partyId,
