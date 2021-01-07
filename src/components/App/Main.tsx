@@ -15,7 +15,7 @@ import { SocketIO } from "contexts/SocketIOContext"
 
 const Tab = ({ children, ...rest }: TabProps) => {
   return (
-    <ChakraTab px={5} {...rest}>
+    <ChakraTab borderBottomWidth="2px" maxWidth="10em" px={5} {...rest}>
       {children}
     </ChakraTab>
   )
@@ -67,8 +67,9 @@ export const Main = () => {
         align="center"
         colorScheme="brand"
         size="lg"
+        isFitted
         index={tabIndex}
-        variant="soft-rounded"
+        variant="enclosed"
       >
         <TabList>
           <Tab onClick={handleTabClick}>Quiz</Tab>
