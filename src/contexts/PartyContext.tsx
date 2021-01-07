@@ -1,4 +1,5 @@
 import { useCookies } from "react-cookie"
+import { Redirect } from "react-router-dom"
 import { SocketIO } from "../contexts/SocketIOContext"
 import { User } from "./UserContext"
 import queryString from "query-string"
@@ -32,6 +33,7 @@ export const PartyProvider = (props: Props) => {
 
   return (
     <Party.Provider value={cookies["party-id"]}>
+      {requestedParty && <Redirect to="/" />}
       {props.children}
     </Party.Provider>
   )

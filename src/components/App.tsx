@@ -1,3 +1,4 @@
+import { BrowserRouter as Router } from "react-router-dom"
 import { ChakraProvider } from "@chakra-ui/react"
 import { DisplayNameProvider } from "../contexts/DisplayNameContext"
 import { NotificationsProvider } from "../contexts/NotificationsContext"
@@ -11,20 +12,22 @@ import { theme } from "../theme"
 import { Header } from "./App/Header"
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
-    <NotificationsProvider>
-      <SocketIOProvider>
-        <UserProvider>
-          <PartyProvider>
-            <QuizProvider>
-              <DisplayNameProvider>
-                <Header />
-                <Main />
-              </DisplayNameProvider>
-            </QuizProvider>
-          </PartyProvider>
-        </UserProvider>
-      </SocketIOProvider>
-    </NotificationsProvider>
-  </ChakraProvider>
+  <Router>
+    <ChakraProvider theme={theme}>
+      <NotificationsProvider>
+        <SocketIOProvider>
+          <UserProvider>
+            <PartyProvider>
+              <QuizProvider>
+                <DisplayNameProvider>
+                  <Header />
+                  <Main />
+                </DisplayNameProvider>
+              </QuizProvider>
+            </PartyProvider>
+          </UserProvider>
+        </SocketIOProvider>
+      </NotificationsProvider>
+    </ChakraProvider>
+  </Router>
 )
