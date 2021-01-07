@@ -10,7 +10,8 @@ import {
 } from "@chakra-ui/react"
 import { Party } from "./Main/Party"
 import { Quiz } from "./Main/Quiz"
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
+import { SocketIO } from "contexts/SocketIOContext"
 
 const Tab = ({ children, ...rest }: TabProps) => {
   return (
@@ -29,7 +30,36 @@ const TabPanel = ({ children, ...rest }: TabPanelProps) => {
 }
 
 export const Main = () => {
+  const socket = useContext(SocketIO)
+
   const [tabIndex, setTabIndex] = useState(0)
+
+  useEffect(() => {
+    const quizStartListener = () => {
+      setTabIndex(0)
+    }
+    const joinedPartyListener = () => {
+      setTabIndex(2)
+    }
+
+    socket.on("new-quiz-id", quizStartListener)
+    socket.on("joined-party-id", joinedPartyListener)
+
+    return () => {
+      socket.off("new-quiz-id", quizStartListener)
+      socket.off("joined-party-id", joinedPartyListener)
+    }
+  }, [])
+
+  const handleTabClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const tabId = e.currentTarget.getAttribute("id")
+    if (tabId) {
+      const index = parseInt(tabId?.slice(-1))
+      setTabIndex(index)
+    }
+  }
 
   return (
     <>
@@ -38,11 +68,12 @@ export const Main = () => {
         colorScheme="brand"
         size="lg"
         index={tabIndex}
-        onChange={i => setTabIndex(i)}
         variant="soft-rounded"
+      >
         <TabList>
-          <Tab>Quiz</Tab>
-          <Tab>Invite Friends</Tab>
+          <Tab onClick={handleTabClick}>Quiz</Tab>
+          <Tab onClick={handleTabClick}>Scores</Tab>
+          <Tab onClick={handleTabClick}>Invite Friends</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
