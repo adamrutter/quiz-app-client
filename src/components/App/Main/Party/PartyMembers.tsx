@@ -5,7 +5,8 @@ import {
   List,
   ListIcon,
   ListItem,
-  Text
+  Text,
+  useColorModeValue
 } from "@chakra-ui/react"
 import { FaUserAlt, FaUserTimes } from "react-icons/fa"
 import { IoMdExit } from "react-icons/io"
@@ -43,6 +44,8 @@ export const PartyMembers = () => {
     )
   }
 
+  const userHighlightIconColor = useColorModeValue("brand.400", "brand.300")
+
   return (
     <Box my={6}>
       <Heading mb={2} size="md" textAlign="left">
@@ -57,7 +60,7 @@ export const PartyMembers = () => {
                 <Box>
                   <ListIcon
                     as={FaUserAlt}
-                    color="gray.500"
+                    color={thisUser ? userHighlightIconColor : "gray.500"}
                     verticalAlign="sub"
                   />
                   {name}
