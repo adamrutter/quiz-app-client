@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom"
 import { SocketIO } from "../contexts/SocketIOContext"
 import { User } from "./UserContext"
 import queryString from "query-string"
-import React, { createContext, ReactNode, useContext } from "react"
+import React, { createContext, ReactNode, useContext, useEffect } from "react"
 
 interface Props {
   children?: ReactNode
@@ -12,24 +12,36 @@ interface Props {
 export const Party = createContext("")
 
 export const PartyProvider = (props: Props) => {
-  const [cookies, setCookie] = useCookies(["party-id"])
+  const [cookies, setCookie, removeCookie] = useCookies(["party-id"])
   const userId = useContext(User)
   const socket = useContext(SocketIO)
 
   const { join: requestedParty } = queryString.parse(window.location.search)
-  if (requestedParty) {
-    socket.emit("join-party", requestedParty, userId)
-    socket.on("joined-party-id", (id: string) => {
+
+  useEffect(() => {
+    const joinedPartyListener = (id: string) => {
       setCookie("party-id", id)
-    })
-  } else if (cookies["party-id"]) {
-    socket.emit("join-party", cookies["party-id"], userId)
-  } else {
-    socket.emit("request-new-party")
-    socket.on("new-party-id", (id: string) => {
+    }
+    const newPartyListener = (id: string) => {
       setCookie("party-id", id)
-    })
-  }
+    }
+
+    if (requestedParty) {
+      socket.emit("join-party", requestedParty, userId)
+    } else if (cookies["party-id"]) {
+      socket.emit("join-party", cookies["party-id"], userId)
+    } else {
+      socket.emit("request-new-party")
+    }
+
+    socket.on("joined-party-id", joinedPartyListener)
+    socket.on("new-party-id", newPartyListener)
+
+    return () => {
+      socket.off("joined-party-id", joinedPartyListener)
+      socket.off("new-party-id", newPartyListener)
+    }
+  }, [cookies])
 
   return (
     <Party.Provider value={cookies["party-id"]}>

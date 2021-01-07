@@ -1,13 +1,13 @@
 import { useCookies } from "react-cookie"
 import { SocketIO } from "../contexts/SocketIOContext"
 import queryString from "query-string"
-import React, { createContext, ReactNode, useContext } from "react"
+import React, { createContext, ReactNode, useContext, useEffect } from "react"
 
 interface Props {
   children?: ReactNode
 }
 
-export const PartyLeader = createContext(false)
+export const PartyLeader = createContext(true)
 
 export const PartyLeaderProvider = (props: Props) => {
   const [cookies, setCookie] = useCookies(["party-leader"])
@@ -15,15 +15,24 @@ export const PartyLeaderProvider = (props: Props) => {
 
   const { join: requestedParty } = queryString.parse(window.location.search)
 
-  if (requestedParty) {
-    socket.on("joined-party-id", (id: string) => {
-      setCookie("party-leader", false)
-    })
-  } else if (!cookies["party-id"]) {
-    socket.on("new-party-id", (id: string) => {
+  useEffect(() => {
+    const newPartyListener = (id: string) => {
       setCookie("party-leader", true)
-    })
-  }
+    }
+    const joinedPartyListener = (id: string) => {
+      setCookie("party-leader", false)
+    }
+
+    socket.on("new-party-id", newPartyListener)
+    if (requestedParty) {
+      socket.on("joined-party-id", joinedPartyListener)
+    }
+
+    return () => {
+      socket.off("new-party-id", newPartyListener)
+      socket.off("joined-party-id", joinedPartyListener)
+    }
+  }, [cookies])
 
   return (
     <PartyLeader.Provider value={cookies["party-leader"] === "true"}>
