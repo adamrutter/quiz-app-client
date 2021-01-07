@@ -57,17 +57,18 @@ export const PartyMembers = () => {
           return (
             <ListItem id={`user-${id}`} key={index}>
               <Flex align="center" justify="space-between">
-                <Box>
+                <Flex align="baseline">
                   <ListIcon
+                    alignSelf="center"
                     as={FaUserAlt}
                     color={thisUser ? userHighlightIconColor : "gray.500"}
                     verticalAlign="sub"
                   />
                   {name}
-                  <Text as="span" color="gray.500" fontSize="xs">
+                  <Text as="span" color="gray.500" fontSize="xs" ml={1}>
                     {thisUser && " (you) "}
                   </Text>
-                </Box>
+                </Flex>
                 {isPartyLeader && !thisUser && (
                   <LeavePartyButton
                     icon={<FaUserTimes />}
