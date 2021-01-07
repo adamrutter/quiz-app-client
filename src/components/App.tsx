@@ -3,6 +3,7 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { DisplayNameProvider } from "../contexts/DisplayNameContext"
 import { NotificationsProvider } from "../contexts/NotificationsContext"
 import { PartyProvider } from "../contexts/PartyContext"
+import { PartyLeaderProvider } from "../contexts/PartyLeaderContext"
 import { QuizProvider } from "../contexts/QuizContext"
 import { SocketIOProvider } from "../contexts/SocketIOContext"
 import { UserProvider } from "../contexts/UserContext"
@@ -18,12 +19,14 @@ export const App = () => (
         <SocketIOProvider>
           <UserProvider>
             <PartyProvider>
-              <QuizProvider>
-                <DisplayNameProvider>
-                  <Header />
-                  <Main />
-                </DisplayNameProvider>
-              </QuizProvider>
+              <PartyLeaderProvider>
+                <QuizProvider>
+                  <DisplayNameProvider>
+                    <Header />
+                    <Main />
+                  </DisplayNameProvider>
+                </QuizProvider>
+              </PartyLeaderProvider>
             </PartyProvider>
           </UserProvider>
         </SocketIOProvider>
