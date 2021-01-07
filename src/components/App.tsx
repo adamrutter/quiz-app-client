@@ -1,4 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react"
+import { DisplayNameProvider } from "../contexts/DisplayNameContext"
 import { NotificationsProvider } from "../contexts/NotificationsContext"
 import { PartyProvider } from "../contexts/PartyContext"
 import { QuizProvider } from "../contexts/QuizContext"
@@ -16,8 +17,10 @@ export const App = () => (
         <UserProvider>
           <PartyProvider>
             <QuizProvider>
-              <Header />
-              <Main />
+              <DisplayNameProvider>
+                <Header />
+                <Main />
+              </DisplayNameProvider>
             </QuizProvider>
           </PartyProvider>
         </UserProvider>
