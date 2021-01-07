@@ -13,7 +13,7 @@ import React, { useContext, useRef } from "react"
 
 export const InviteFriends = () => {
   const partyId = useContext(PartyId)
-  const joinUrl = `localhost:3000/?join=${partyId}`
+  const joinUrl = `${process.env.REACT_APP_CLIENT_URL}/?join=${partyId}`
 
   const linkRef = useRef<HTMLInputElement>(null)
 
