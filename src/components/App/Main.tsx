@@ -23,7 +23,7 @@ const Tab = ({ children, ...rest }: TabProps) => {
 const TabPanel = ({ children, ...rest }: TabPanelProps) => {
   return (
     <ChakraTabPanel my={6} {...rest}>
-      <Container>{children}</Container>
+      <Container px={1}>{children}</Container>
     </ChakraTabPanel>
   )
 }
