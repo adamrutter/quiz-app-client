@@ -25,6 +25,11 @@ export const PartyProvider = (props: Props) => {
     const newPartyListener = (id: string) => {
       setCookie("party-id", id)
     }
+    const userLeavingPartyListener = (userLeavingId: string) => {
+      if (userId === userLeavingId) {
+        removeCookie("party-id")
+      }
+    }
 
     if (requestedParty) {
       socket.emit("join-party", requestedParty, userId)
@@ -36,10 +41,12 @@ export const PartyProvider = (props: Props) => {
 
     socket.on("joined-party-id", joinedPartyListener)
     socket.on("new-party-id", newPartyListener)
+    socket.on("user-leaving-party", userLeavingPartyListener)
 
     return () => {
       socket.off("joined-party-id", joinedPartyListener)
       socket.off("new-party-id", newPartyListener)
+      socket.off("user-leaving-party", userLeavingPartyListener)
     }
   }, [cookies])
 

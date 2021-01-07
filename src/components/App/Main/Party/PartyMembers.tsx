@@ -1,5 +1,17 @@
-import { Box, Heading, List, ListIcon, ListItem, Text } from "@chakra-ui/react"
-import { FaUserAlt } from "react-icons/fa"
+import {
+  Box,
+  Flex,
+  Heading,
+  List,
+  ListIcon,
+  ListItem,
+  Text
+} from "@chakra-ui/react"
+import { FaUserAlt, FaUserTimes } from "react-icons/fa"
+import { IoMdExit } from "react-icons/io"
+import { LeavePartyButton } from "./PartyMembers/LeavePartyButton"
+import { Party } from "contexts/PartyContext"
+import { PartyLeader } from "contexts/PartyLeaderContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
 import React, { useContext, useEffect, useState } from "react"
@@ -11,6 +23,8 @@ interface PartyMember {
 export const PartyMembers = () => {
   const socket = useContext(SocketIO)
   const userId = useContext(User)
+  const partyId = useContext(Party)
+  const isPartyLeader = useContext(PartyLeader)
 
   const [partyMembers, setPartyMembers] = useState<Array<PartyMember>>([])
 
@@ -20,6 +34,14 @@ export const PartyMembers = () => {
       setPartyMembers(members)
     })
   }, [socket])
+
+  const kickMember = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    socket.emit(
+      "kick-party-member",
+      e.currentTarget.getAttribute("data-user-id"),
+      partyId
+    )
+  }
 
   return (
     <Box my={6}>
@@ -31,11 +53,37 @@ export const PartyMembers = () => {
           const thisUser = id === userId
           return (
             <ListItem id={`user-${id}`} key={index}>
-              <ListIcon as={FaUserAlt} color="gray.500" verticalAlign="sub" />
-              {name}
-              <Text as="span" color="gray.500" fontSize="xs">
-                {thisUser && " (you) "}
-              </Text>
+              <Flex align="center" justify="space-between">
+                <Box>
+                  <ListIcon
+                    as={FaUserAlt}
+                    color="gray.500"
+                    verticalAlign="sub"
+                  />
+                  {name}
+                  <Text as="span" color="gray.500" fontSize="xs">
+                    {thisUser && " (you) "}
+                  </Text>
+                </Box>
+                {isPartyLeader && !thisUser && (
+                  <LeavePartyButton
+                    icon={<FaUserTimes />}
+                    id={id}
+                    onClick={kickMember}
+                  >
+                    Kick
+                  </LeavePartyButton>
+                )}
+                {!isPartyLeader && thisUser && (
+                  <LeavePartyButton
+                    icon={<IoMdExit />}
+                    id={id}
+                    onClick={kickMember}
+                  >
+                    Leave
+                  </LeavePartyButton>
+                )}
+              </Flex>
             </ListItem>
           )
         })}
