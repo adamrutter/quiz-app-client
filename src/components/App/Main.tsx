@@ -74,7 +74,7 @@ export const Main = () => {
         <TabList>
           <Tab onClick={handleTabClick}>Quiz</Tab>
           <Tab onClick={handleTabClick}>Scores</Tab>
-          <Tab onClick={handleTabClick}>Invite Friends</Tab>
+          <Tab onClick={handleTabClick}>Friends</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
