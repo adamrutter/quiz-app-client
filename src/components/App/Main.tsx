@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { Party } from "./Main/Party"
 import { Quiz } from "./Main/Quiz"
-import React from "react"
+import React, { useState } from "react"
 
 const Tab = ({ children, ...rest }: TabProps) => {
   return (
@@ -29,9 +29,17 @@ const TabPanel = ({ children, ...rest }: TabPanelProps) => {
 }
 
 export const Main = () => {
+  const [tabIndex, setTabIndex] = useState(0)
+
   return (
     <>
-      <Tabs align="center" colorScheme="brand" size="lg" variant="soft-rounded">
+      <Tabs
+        align="center"
+        colorScheme="brand"
+        size="lg"
+        index={tabIndex}
+        onChange={i => setTabIndex(i)}
+        variant="soft-rounded"
         <TabList>
           <Tab>Quiz</Tab>
           <Tab>Invite Friends</Tab>
