@@ -38,16 +38,11 @@ export const Main = () => {
     const quizStartListener = () => {
       setTabIndex(0)
     }
-    const joinedPartyListener = () => {
-      setTabIndex(2)
-    }
 
     socket.on("new-quiz-id", quizStartListener)
-    socket.on("joined-party-id", joinedPartyListener)
 
     return () => {
       socket.off("new-quiz-id", quizStartListener)
-      socket.off("joined-party-id", joinedPartyListener)
     }
   }, [])
 
