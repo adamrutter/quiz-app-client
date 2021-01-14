@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const UsernameItem = ({
-  color,
+  color = "gray.500",
   fontSize = "md",
   icon,
   id,
@@ -27,7 +27,7 @@ export const UsernameItem = ({
           <ListIcon
             alignSelf="center"
             as={icon}
-            color={color || "gray.500"}
+            color={color}
             mr={2}
             verticalAlign="sub"
           />

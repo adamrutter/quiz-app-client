@@ -55,7 +55,7 @@ export const PartyMembers = () => {
             <ListItem id={`user-${id}`} key={index}>
               <Flex align="center" justify="space-between">
                 <UsernameItem
-                  color={userHighlightIconColor}
+                  color={thisUser ? userHighlightIconColor : undefined}
                   icon={FaUserAlt}
                   id={id}
                   name={name}
