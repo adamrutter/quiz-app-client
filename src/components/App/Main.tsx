@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { Party } from "./Main/Party"
 import { Quiz } from "./Main/Quiz"
+import { Scoreboard } from "./Main/Scoreboard"
 import React, { useContext, useEffect, useState } from "react"
 import { SocketIO } from "contexts/SocketIOContext"
 
@@ -74,6 +75,9 @@ export const Main = () => {
         <TabPanels>
           <TabPanel>
             <Quiz />
+          </TabPanel>
+          <TabPanel>
+            <Scoreboard />
           </TabPanel>
           <TabPanel>
             <Party />
