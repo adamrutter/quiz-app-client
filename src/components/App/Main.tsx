@@ -33,17 +33,23 @@ const TabPanel = ({ children, ...rest }: TabPanelProps) => {
 export const Main = () => {
   const socket = useContext(SocketIO)
 
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useState(1)
 
   useEffect(() => {
-    const quizStartListener = () => {
+    const newQuestion = () => {
       setTabIndex(0)
     }
+    const postQuestionListener = () => {
+      setTabIndex(0)
+      setTimeout(() => setTabIndex(1), 1500)
+    }
 
-    socket.on("new-quiz-id", quizStartListener)
+    socket.on("new-question", newQuestion)
+    socket.on("begin-post-question", postQuestionListener)
 
     return () => {
-      socket.off("new-quiz-id", quizStartListener)
+      socket.off("new-question", newQuestion)
+      socket.off("begin-post-question", postQuestionListener)
     }
   }, [])
 
