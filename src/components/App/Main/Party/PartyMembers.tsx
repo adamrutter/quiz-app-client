@@ -15,11 +15,8 @@ import { Party } from "contexts/PartyContext"
 import { PartyLeader } from "contexts/PartyLeaderContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
+import { UsernameItem } from "../shared/UsernameItem"
 import React, { useContext, useEffect, useState } from "react"
-
-interface PartyMember {
-  displayName: string
-}
 
 export const PartyMembers = () => {
   const socket = useContext(SocketIO)
@@ -27,11 +24,11 @@ export const PartyMembers = () => {
   const partyId = useContext(Party)
   const isPartyLeader = useContext(PartyLeader)
 
-  const [partyMembers, setPartyMembers] = useState<Array<PartyMember>>([])
+  const [partyMembers, setPartyMembers] = useState<Array<string>>([])
 
   useEffect(() => {
     socket.emit("request-party-members")
-    socket.on("party-members", (members: Array<PartyMember>) => {
+    socket.on("party-members", (members: Array<string>) => {
       setPartyMembers(members)
     })
   }, [socket])
@@ -57,18 +54,12 @@ export const PartyMembers = () => {
           return (
             <ListItem id={`user-${id}`} key={index}>
               <Flex align="center" justify="space-between">
-                <Flex align="baseline">
-                  <ListIcon
-                    alignSelf="center"
-                    as={FaUserAlt}
-                    color={thisUser ? userHighlightIconColor : "gray.500"}
-                    verticalAlign="sub"
-                  />
-                  {name}
-                  <Text as="span" color="gray.500" fontSize="xs" ml={1}>
-                    {thisUser && " (you) "}
-                  </Text>
-                </Flex>
+                <UsernameItem
+                  color={userHighlightIconColor}
+                  icon={FaUserAlt}
+                  id={id}
+                  name={name}
+                />
                 {isPartyLeader && !thisUser && (
                   <LeavePartyButton
                     icon={<FaUserTimes />}
