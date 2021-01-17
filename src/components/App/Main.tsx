@@ -33,7 +33,7 @@ const TabPanel = ({ children, ...rest }: TabPanelProps) => {
 export const Main = () => {
   const socket = useContext(SocketIO)
 
-  const [tabIndex, setTabIndex] = useState(1)
+  const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
     const newQuestion = () => {
