@@ -30,8 +30,8 @@ interface TriviaCategory {
 interface QuizOptions {
   category: number | undefined
   amount: string
-  difficulty: string
-  type: string
+  difficulty: string | undefined
+  type: string | undefined
 }
 
 const FormLabel = ({ children, ...rest }: FormLabelProps) => {
@@ -107,12 +107,32 @@ export const OptionsForm = () => {
     getCategories().then(data => setCategories(data))
   }, [])
 
-  // Find the correct category id
+  // Keep track of options in correct form for API
   const [categoryId, setCategoryId] = useState<number | undefined>()
   useEffect(() => {
     const obj = categories?.find(category => category.name === categoryValue)
     setCategoryId(obj?.id)
   }, [categories, categoryValue])
+
+  const [difficulty, setDifficulty] = useState<string | undefined>()
+  useEffect(() => {
+    const str =
+      difficultyValue === "Random"
+        ? undefined
+        : difficultyValue.toString().toLowerCase()
+    setDifficulty(str)
+  }, [difficultyValue])
+
+  const [type, setType] = useState<string | undefined>()
+  useEffect(() => {
+    let str
+
+    if (typeValue === "Random") str = undefined
+    if (typeValue === "Multiple choice") str = "multiple"
+    if (typeValue === "True/false") str = "boolean"
+
+    setType(str)
+  }, [typeValue])
 
   // Set up the radio button cards
   // See https://chakra-ui.com/docs/form/radio#custom-radio-buttons
@@ -142,8 +162,8 @@ export const OptionsForm = () => {
         submitForm(e, socket, partyId, {
           category: categoryId,
           amount: amountValue,
-          difficulty: difficultyValue.toString(),
-          type: typeValue.toString()
+          difficulty,
+          type
         })
       }
     >
