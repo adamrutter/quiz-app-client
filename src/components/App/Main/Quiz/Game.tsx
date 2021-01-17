@@ -1,10 +1,11 @@
 import { Answer } from "./Game/Answer"
 import { Header } from "./Game/Header"
-import { Alert, SimpleGrid, Spinner, Text } from "@chakra-ui/react"
+import { Alert, SimpleGrid, Spinner, Text, useToast } from "@chakra-ui/react"
 import { Party } from "contexts/PartyContext"
 import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
+import { UserAnsweredNotification } from "./Game/UserAnsweredNotification"
 import React, { useContext, useEffect, useState } from "react"
 
 export interface Question {
@@ -55,6 +56,8 @@ const isButtonDisabled = (
 }
 
 export const Game = () => {
+  const toast = useToast()
+
   const socket = useContext(SocketIO)
   const partyId = useContext(Party)
   const userId = useContext(User)
@@ -160,6 +163,15 @@ export const Game = () => {
     const listener = (thisUser: UserType, totalUsers: string) => {
       setAmountOfMembers(parseInt(totalUsers))
       setUsersAnswered(oldState => [...oldState, thisUser])
+
+      // Send a notification if the user answering wasn't this user
+      if (thisUser.id !== userId) {
+        toast({
+          duration: 1500,
+          position: "bottom-right",
+          render: () => <UserAnsweredNotification user={thisUser.name} />
+        })
+      }
     }
 
     socket.on("user-answered", listener)
