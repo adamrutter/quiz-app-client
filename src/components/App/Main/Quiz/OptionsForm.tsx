@@ -28,7 +28,7 @@ interface TriviaCategory {
 }
 
 interface QuizOptions {
-  category: string
+  category: number | undefined
   amount: string
   difficulty: string
   type: string
@@ -97,7 +97,7 @@ export const OptionsForm = () => {
 
   // Form values
   const [categoryValue, setCategoryValue] = useState("Random")
-  const [amountValue, setAmountValue] = useState("10")
+  const [amountValue, setAmountValue] = useState("1")
   const [difficultyValue, setDifficultyValue] = useState<ReactText>("Random")
   const [typeValue, setTypeValue] = useState<ReactText>("Random")
 
@@ -106,6 +106,13 @@ export const OptionsForm = () => {
   useEffect(() => {
     getCategories().then(data => setCategories(data))
   }, [])
+
+  // Find the correct category id
+  const [categoryId, setCategoryId] = useState<number | undefined>()
+  useEffect(() => {
+    const obj = categories?.find(category => category.name === categoryValue)
+    setCategoryId(obj?.id)
+  }, [categories, categoryValue])
 
   // Set up the radio button cards
   // See https://chakra-ui.com/docs/form/radio#custom-radio-buttons
@@ -133,7 +140,7 @@ export const OptionsForm = () => {
     <form
       onSubmit={e =>
         submitForm(e, socket, partyId, {
-          category: categoryValue,
+          category: categoryId,
           amount: amountValue,
           difficulty: difficultyValue.toString(),
           type: typeValue.toString()
