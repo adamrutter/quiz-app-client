@@ -1,6 +1,6 @@
 import { Answer } from "./Game/Answer"
 import { Header } from "./Game/Header"
-import { SimpleGrid, Text } from "@chakra-ui/react"
+import { Alert, SimpleGrid, Spinner, Text } from "@chakra-ui/react"
 import { Party } from "contexts/PartyContext"
 import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
@@ -14,6 +14,11 @@ export interface Question {
   difficulty: string
   number: string
   total: string
+}
+
+interface UserType {
+  id: string
+  name: string
 }
 
 /**
@@ -61,6 +66,11 @@ export const Game = () => {
   const [currentAnswers, setCurrentAnswers] = useState<Array<string>>()
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
   const [correctAnswer, setCorrectAnswer] = useState<number | undefined>()
+  const [remainingAnswersPrompt, setRemainingAnswersPrompt] = useState(false)
+  const [usersAnswered, setUsersAnswered] = useState<UserType[]>([])
+  const [amountOfMembers, setAmountOfMembers] = useState(0)
+
+  const usersNotAnswered = amountOfMembers - usersAnswered?.length
 
   /* Update the timer */
   const timerEvent = `timer-update-${quizId}-${currentQuestion?.number}`
@@ -137,12 +147,38 @@ export const Game = () => {
       setCurrentAnswers([])
       setSelectedAnswer(undefined)
       setCorrectAnswer(undefined)
+      setUsersAnswered([])
     }
     socket.on("finish-question", listener)
     return () => {
       socket.off("finish-question", listener)
     }
   }, [socket])
+
+  // Handle being told a user has answered
+  useEffect(() => {
+    const listener = (thisUser: UserType, totalUsers: string) => {
+      setAmountOfMembers(parseInt(totalUsers))
+      setUsersAnswered(oldState => [...oldState, thisUser])
+    }
+
+    socket.on("user-answered", listener)
+
+    return () => {
+      socket.off("user-answered", listener)
+    }
+  }, [])
+
+  useEffect(() => {
+    const notAllUsersHaveAnswered = usersAnswered?.length < amountOfMembers
+    const thisUserHasAnswered = selectedAnswer !== undefined
+
+    if (notAllUsersHaveAnswered && thisUserHasAnswered) {
+      setRemainingAnswersPrompt(true)
+    } else {
+      setRemainingAnswersPrompt(false)
+    }
+  }, [usersAnswered])
 
   // Return the color scheme the button should use.
   const buttonColorScheme = (index: number): string => {
@@ -166,6 +202,16 @@ export const Game = () => {
     <>
       {currentQuestion && (
         <>
+          {remainingAnswersPrompt && (
+            <Alert colorScheme="brand" mb={6}>
+              <Spinner mr={2} size="sm" speed="1.5s" />
+              Waiting for{" "}
+              {usersNotAnswered === 1
+                ? "1 more person"
+                : `${usersNotAnswered} more people`}{" "}
+              to answer...
+            </Alert>
+          )}
           <Header
             amountOfQuestions={amountOfQuestions}
             currentQuestionNumber={currentQuestion.number}
