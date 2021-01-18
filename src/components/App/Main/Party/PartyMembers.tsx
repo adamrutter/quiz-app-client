@@ -12,9 +12,9 @@ import { FaUserAlt, FaUserTimes } from "react-icons/fa"
 import { IoMdExit } from "react-icons/io"
 import { LeavePartyButton } from "./PartyMembers/LeavePartyButton"
 import { Party } from "contexts/PartyContext"
-import { PartyLeader } from "contexts/PartyLeaderContext"
 import { PartyMembers as PartyMembersContext } from "contexts/PartyMembersContext"
 import { SocketIO } from "contexts/SocketIOContext"
+import { usePartyLeader } from "hooks/usePartyLeader"
 import { User } from "contexts/UserContext"
 import { UsernameItem } from "../shared/UsernameItem"
 import React, { useContext } from "react"
@@ -23,8 +23,9 @@ export const PartyMembers = () => {
   const socket = useContext(SocketIO)
   const userId = useContext(User)
   const partyId = useContext(Party)
-  const isPartyLeader = useContext(PartyLeader)
   const partyMembers = useContext(PartyMembersContext)
+
+  const partyLeader = usePartyLeader()
 
   const kickMember = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     socket.emit(
@@ -44,6 +45,8 @@ export const PartyMembers = () => {
       <List textAlign="left">
         {partyMembers.map((member, index) => {
           const thisUser = member.id === userId
+          const isPartyLeader = partyLeader?.id === userId
+
           return (
             <ListItem id={`user-${member.id}`} key={index}>
               <Flex align="center" justify="space-between">
