@@ -17,6 +17,7 @@ import {
 import { BrandIcon } from "../../shared/BrandIcon"
 import { OptionsRadioCard } from "./OptionsForm/OptionsRadioCard"
 import { Party } from "contexts/PartyContext"
+import { Quiz } from "contexts/QuizContext"
 import { Socket } from "socket.io-client"
 import { SocketIO } from "contexts/SocketIOContext"
 import axios from "axios"
@@ -91,6 +92,7 @@ const submitForm = (
 
 export const OptionsForm = () => {
   const partyId = useContext(Party)
+  const quizId = useContext(Quiz)
 
   // The socket.io client
   const socket = useContext(SocketIO)
@@ -157,99 +159,112 @@ export const OptionsForm = () => {
   const typeGroup = getTypeRootProps()
 
   return (
-    <form
-      onSubmit={e =>
-        submitForm(e, socket, partyId, {
-          category: categoryId,
-          amount: amountValue,
-          difficulty,
-          type
-        })
-      }
-    >
-      <FormLine minChildWidth="175px">
-        <FormControl width="full">
-          <FormLabel>Category</FormLabel>
-          <Select
-            focusBorderColor="brand.200"
-            id="category-select"
-            onChange={e => setCategoryValue(e.target.value)}
-            value={categoryValue}
-          >
-            <option value="Random">Random</option>
-            {categories &&
-              categories.map((category, index) => (
-                <option key={index} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
-          </Select>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Number of questions</FormLabel>
-          <NumberInput
-            inputMode="numeric"
-            focusBorderColor="brand.200"
-            max={50}
-            min={1}
-            onChange={stringValue => setAmountValue(stringValue.split(".")[0])}
-            precision={0}
-            value={amountValue}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-        </FormControl>
-      </FormLine>
-      <FormLine>
-        <FormControl>
-          <FormLabel>Difficulty</FormLabel>
-          <SimpleGrid columns={[1, 2, 4]} spacing={2} {...difficultyGroup}>
-            {["Random", "Easy", "Medium", "Hard"].map((value, index) => {
-              const radio = getDifficultyRadioProps({ value })
-              return (
-                <OptionsRadioCard
-                  key={index}
-                  onChange={(e: any) => console.log("hello")}
-                  {...radio}
-                >
-                  {value}
-                </OptionsRadioCard>
-              )
-            })}
-          </SimpleGrid>
-        </FormControl>
-      </FormLine>
-      <FormLine>
-        <FormControl>
-          <FormLabel>Type</FormLabel>
-          <SimpleGrid columns={[1, 2, 3]} spacing={2} {...typeGroup}>
-            {["Random", "Multiple choice", "True/false"].map((value, index) => {
-              const radio = getTypeRadioProps({ value })
-              return (
-                <OptionsRadioCard key={index} {...radio}>
-                  {value}
-                </OptionsRadioCard>
-              )
-            })}
-          </SimpleGrid>
-        </FormControl>
-      </FormLine>
-      <FormLine my={8}>
-        <Button
-          colorScheme="brand"
-          leftIcon={<BrandIcon size="sm" />}
-          px={7}
-          size="lg"
-          type="submit"
-          w={["full", "unset"]}
+    <>
+      {/* 
+      Using this conditional here instead of in the parent component so this
+      component itself never unmounts (means state can be kept here rather than
+      the parent) 
+    */}
+      {!quizId && (
+        <form
+          onSubmit={e =>
+            submitForm(e, socket, partyId, {
+              category: categoryId,
+              amount: amountValue,
+              difficulty,
+              type
+            })
+          }
         >
-          Start quiz!
-        </Button>
-      </FormLine>
-    </form>
+          <FormLine minChildWidth="175px">
+            <FormControl width="full">
+              <FormLabel>Category</FormLabel>
+              <Select
+                focusBorderColor="brand.200"
+                id="category-select"
+                onChange={e => setCategoryValue(e.target.value)}
+                value={categoryValue}
+              >
+                <option value="Random">Random</option>
+                {categories &&
+                  categories.map((category, index) => (
+                    <option key={index} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+              </Select>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Number of questions</FormLabel>
+              <NumberInput
+                inputMode="numeric"
+                focusBorderColor="brand.200"
+                max={50}
+                min={1}
+                onChange={stringValue =>
+                  setAmountValue(stringValue.split(".")[0])
+                }
+                precision={0}
+                value={amountValue}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
+          </FormLine>
+          <FormLine>
+            <FormControl>
+              <FormLabel>Difficulty</FormLabel>
+              <SimpleGrid columns={[1, 2, 4]} spacing={2} {...difficultyGroup}>
+                {["Random", "Easy", "Medium", "Hard"].map((value, index) => {
+                  const radio = getDifficultyRadioProps({ value })
+                  return (
+                    <OptionsRadioCard
+                      key={index}
+                      onChange={(e: any) => console.log("hello")}
+                      {...radio}
+                    >
+                      {value}
+                    </OptionsRadioCard>
+                  )
+                })}
+              </SimpleGrid>
+            </FormControl>
+          </FormLine>
+          <FormLine>
+            <FormControl>
+              <FormLabel>Type</FormLabel>
+              <SimpleGrid columns={[1, 2, 3]} spacing={2} {...typeGroup}>
+                {["Random", "Multiple choice", "True/false"].map(
+                  (value, index) => {
+                    const radio = getTypeRadioProps({ value })
+                    return (
+                      <OptionsRadioCard key={index} {...radio}>
+                        {value}
+                      </OptionsRadioCard>
+                    )
+                  }
+                )}
+              </SimpleGrid>
+            </FormControl>
+          </FormLine>
+          <FormLine my={8}>
+            <Button
+              colorScheme="brand"
+              leftIcon={<BrandIcon size="sm" />}
+              px={7}
+              size="lg"
+              type="submit"
+              w={["full", "unset"]}
+            >
+              Start quiz!
+            </Button>
+          </FormLine>
+        </form>
+      )}
+    </>
   )
 }

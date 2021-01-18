@@ -27,7 +27,8 @@ export const Quiz = () => {
   return (
     <>
       <ReadyPrompt isOpen={readyPromptOpen} />
-      {quizId ? <Game /> : <OptionsForm />}
+      <OptionsForm />
+      {quizId && <Game />}
     </>
   )
 }
