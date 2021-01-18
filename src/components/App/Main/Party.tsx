@@ -7,10 +7,10 @@ import React from "react"
 export const Party = () => {
   return (
     <>
-      <InviteFriends />
-      <Divider my={7} />
       <PartyMembers />
       <ChangeName />
+      <Divider my={7} />
+      <InviteFriends />
     </>
   )
 }

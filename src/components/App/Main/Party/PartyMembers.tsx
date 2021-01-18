@@ -38,7 +38,7 @@ export const PartyMembers = () => {
   const userHighlightIconColor = useColorModeValue("brand.400", "brand.300")
 
   return (
-    <Box my={6}>
+    <Box my={3}>
       <Heading mb={2} size="md" textAlign="left">
         Party
       </Heading>
