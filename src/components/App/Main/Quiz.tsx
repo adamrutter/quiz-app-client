@@ -1,13 +1,19 @@
+import { Box, Spinner } from "@chakra-ui/react"
 import { Game } from "./Quiz/Game"
 import { OptionsForm } from "./Quiz/OptionsForm"
 import { Quiz as QuizId } from "contexts/QuizContext"
 import { ReadyPrompt } from "./Quiz/ReadyPrompt"
 import { SocketIO } from "contexts/SocketIOContext"
+import { usePartyLeader } from "hooks/usePartyLeader"
+import { User } from "contexts/UserContext"
+import { WaitForStart } from "./Quiz/WaitForStart"
 import React, { useContext, useEffect, useState } from "react"
 
 export const Quiz = () => {
   const socket = useContext(SocketIO)
   const quizId = useContext(QuizId)
+  const userId = useContext(User)
+  const partyLeader = usePartyLeader()
 
   // Whether to show the pre-quiz ready prompt
   const [readyPromptOpen, setReadyPromptOpen] = useState(false)
@@ -27,7 +33,17 @@ export const Quiz = () => {
   return (
     <>
       <ReadyPrompt isOpen={readyPromptOpen} />
-      <OptionsForm />
+      {partyLeader ? (
+        userId === partyLeader?.id ? (
+          <OptionsForm />
+        ) : (
+          <WaitForStart />
+        )
+      ) : (
+        <Box>
+          Loading... <Spinner ml={2} size="sm" speed="1s" />
+        </Box>
+      )}
       {quizId && <Game />}
     </>
   )

@@ -136,6 +136,18 @@ export const OptionsForm = () => {
     setType(str)
   }, [typeValue])
 
+  // Send human formatted options to socket.io so they can be emitted to all clients
+  useEffect(() => {
+    const options = {
+      category: categoryValue,
+      amount: amountValue,
+      difficulty: difficultyValue,
+      type: typeValue
+    }
+    console.log(options)
+    socket.emit("party-leader-quiz-options", options, partyId)
+  }, [categoryValue, amountValue, difficultyValue, typeValue])
+
   // Set up the radio button cards
   // See https://chakra-ui.com/docs/form/radio#custom-radio-buttons
   const {
