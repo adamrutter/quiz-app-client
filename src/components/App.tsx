@@ -11,6 +11,7 @@ import React from "react"
 import { Main } from "./App/Main"
 import { theme } from "../theme"
 import { Header } from "./App/Header"
+import { PartyMembersProvider } from "contexts/PartyMembersContext"
 
 export const App = () => (
   <Router>
@@ -22,8 +23,10 @@ export const App = () => (
               <PartyLeaderProvider>
                 <QuizProvider>
                   <DisplayNameProvider>
-                    <Header />
-                    <Main />
+                    <PartyMembersProvider>
+                      <Header />
+                      <Main />
+                    </PartyMembersProvider>
                   </DisplayNameProvider>
                 </QuizProvider>
               </PartyLeaderProvider>

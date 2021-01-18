@@ -13,25 +13,18 @@ import { IoMdExit } from "react-icons/io"
 import { LeavePartyButton } from "./PartyMembers/LeavePartyButton"
 import { Party } from "contexts/PartyContext"
 import { PartyLeader } from "contexts/PartyLeaderContext"
+import { PartyMembers as PartyMembersContext } from "contexts/PartyMembersContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
 import { UsernameItem } from "../shared/UsernameItem"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext } from "react"
 
 export const PartyMembers = () => {
   const socket = useContext(SocketIO)
   const userId = useContext(User)
   const partyId = useContext(Party)
   const isPartyLeader = useContext(PartyLeader)
-
-  const [partyMembers, setPartyMembers] = useState<Array<string>>([])
-
-  useEffect(() => {
-    socket.emit("request-party-members")
-    socket.on("party-members", (members: Array<string>) => {
-      setPartyMembers(members)
-    })
-  }, [socket])
+  const partyMembers = useContext(PartyMembersContext)
 
   const kickMember = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     socket.emit(
@@ -49,21 +42,21 @@ export const PartyMembers = () => {
         Party
       </Heading>
       <List textAlign="left">
-        {Object.entries(partyMembers).map(([id, name], index) => {
-          const thisUser = id === userId
+        {partyMembers.map((member, index) => {
+          const thisUser = member.id === userId
           return (
-            <ListItem id={`user-${id}`} key={index}>
+            <ListItem id={`user-${member.id}`} key={index}>
               <Flex align="center" justify="space-between">
                 <UsernameItem
                   color={thisUser ? userHighlightIconColor : undefined}
                   icon={FaUserAlt}
-                  id={id}
-                  name={name}
+                  id={member.id}
+                  name={member.name}
                 />
                 {isPartyLeader && !thisUser && (
                   <LeavePartyButton
                     icon={<FaUserTimes />}
-                    id={id}
+                    id={member.id}
                     onClick={kickMember}
                   >
                     Kick
@@ -72,7 +65,7 @@ export const PartyMembers = () => {
                 {!isPartyLeader && thisUser && (
                   <LeavePartyButton
                     icon={<IoMdExit />}
-                    id={id}
+                    id={member.id}
                     onClick={kickMember}
                   >
                     Leave
