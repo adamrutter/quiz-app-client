@@ -14,6 +14,7 @@ import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
 import { UserAnsweredNotification } from "./Game/UserAnsweredNotification"
+import { useAmountOfQuestions } from "hooks/useAmountOfQuestions"
 import { useTimer } from "hooks/useTimer"
 import React, { useContext, useEffect, useState } from "react"
 
@@ -83,7 +84,6 @@ export const Game = () => {
   const userId = useContext(User)
   const quizId = useContext(Quiz)
 
-  const [amountOfQuestions, setAmountOfQuestions] = useState("")
   const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>()
   const [currentAnswers, setCurrentAnswers] = useState<Array<string>>()
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
@@ -93,19 +93,9 @@ export const Game = () => {
   const [amountOfMembers, setAmountOfMembers] = useState(0)
 
   const timer = useTimer(currentQuestion?.number)
+  const amountOfQuestions = useAmountOfQuestions()
 
   const usersNotAnswered = amountOfMembers - usersAnswered?.length
-
-  // Handle socket.io informing us of the amount of questions in the quiz
-  useEffect(() => {
-    const listener = (amount: string) => {
-      setAmountOfQuestions(amount)
-    }
-    socket.on("amount-of-questions", listener)
-    return () => {
-      socket.off("amount-of-questions", listener)
-    }
-  }, [socket])
 
   // Handle being sent a question by the socket.io server
   useEffect(() => {
