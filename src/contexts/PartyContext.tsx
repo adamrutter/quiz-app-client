@@ -31,6 +31,7 @@ export const PartyProvider = (props: Props) => {
       if (userId === userLeavingId) {
         removeCookie("party-id")
         removeCookie("quiz-id")
+        window.location.reload()
       }
     }
 
