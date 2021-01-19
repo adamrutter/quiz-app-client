@@ -43,9 +43,12 @@ export const Quiz = () => {
           Loading... <Spinner ml={2} size="sm" speed="1s" />
         </Box>
       )}
-      {!isLoading &&
-        partyLeader &&
-        (userId === partyLeader?.id ? <OptionsForm /> : <WaitForStart />)}
+      {!isLoading && partyLeader && userId === partyLeader?.id && (
+        <OptionsForm />
+      )}
+      {!isLoading && partyLeader && userId !== partyLeader?.id && !quizId && (
+        <WaitForStart />
+      )}
       {!isLoading && !partyLeader && (
         <Alert
           mb={6}
