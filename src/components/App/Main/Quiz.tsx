@@ -17,8 +17,11 @@ export const Quiz = () => {
   const partyMembers = useContext(PartyMembersContext)
   const partyLeader = usePartyLeader()
 
-  // Whether to show the pre-quiz ready prompt
   const [readyPromptOpen, setReadyPromptOpen] = useState(false)
+
+  const isLoading = partyMembers.length === 0
+
+  // Whether to show the pre-quiz ready prompt
   useEffect(() => {
     const readyPromptListener = () => setReadyPromptOpen(true)
     const allUsersReadyListener = () => setReadyPromptOpen(false)
@@ -31,8 +34,6 @@ export const Quiz = () => {
       socket.off("all-users-ready", allUsersReadyListener)
     }
   }, [])
-
-  const isLoading = partyMembers.length === 0
 
   return (
     <>
