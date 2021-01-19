@@ -1,3 +1,4 @@
+import { Party } from "contexts/PartyContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { useContext, useEffect, useState } from "react"
 
@@ -10,6 +11,7 @@ export interface UserScore {
 
 export const useScores = () => {
   const socket = useContext(SocketIO)
+  const partyId = useContext(Party)
 
   const [scores, setScores] = useState<UserScore[]>()
 
@@ -24,6 +26,10 @@ export const useScores = () => {
       socket.off("updated-scorecard", scoreboardListener)
     }
   }, [socket])
+
+  useEffect(() => {
+    if (!partyId) setScores(undefined)
+  }, [partyId])
 
   return scores
 }

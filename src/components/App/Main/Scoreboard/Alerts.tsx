@@ -20,7 +20,7 @@ export const Alerts = ({ scores }: Props) => {
 
   return (
     <>
-      {quizFinished && winningUsers && (
+      {quizFinished && winningUsers && scores?.length !== 0 && (
         <Alert colorScheme="green" variant="left-accent">
           <AlertIcon as={GiQueenCrown} boxSize="2em" />
           <AlertTitle>Quiz finished!</AlertTitle>
