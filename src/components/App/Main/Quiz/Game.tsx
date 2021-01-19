@@ -10,22 +10,15 @@ import {
   useToast
 } from "@chakra-ui/react"
 import { Party } from "contexts/PartyContext"
+import { Question } from "types"
 import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
 import { UserAnsweredNotification } from "./Game/UserAnsweredNotification"
 import { useAmountOfQuestions } from "hooks/useAmountOfQuestions"
+import { useQuestion } from "hooks/useQuestion"
 import { useTimer } from "hooks/useTimer"
 import React, { useContext, useEffect, useState } from "react"
-
-export interface Question {
-  question: string
-  answers: Array<string>
-  category: string
-  difficulty: string
-  number: string
-  total: string
-}
 
 interface UserType {
   id: string
@@ -84,7 +77,6 @@ export const Game = () => {
   const userId = useContext(User)
   const quizId = useContext(Quiz)
 
-  const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>()
   const [currentAnswers, setCurrentAnswers] = useState<Array<string>>()
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
   const [correctAnswer, setCorrectAnswer] = useState<number | undefined>()
@@ -92,6 +84,7 @@ export const Game = () => {
   const [usersAnswered, setUsersAnswered] = useState<UserType[]>([])
   const [amountOfMembers, setAmountOfMembers] = useState(0)
 
+  const currentQuestion = useQuestion()
   const timer = useTimer(currentQuestion?.number)
   const amountOfQuestions = useAmountOfQuestions()
 
@@ -100,7 +93,6 @@ export const Game = () => {
   // Handle being sent a question by the socket.io server
   useEffect(() => {
     const listener = (question: Question) => {
-      setCurrentQuestion(question)
       setCurrentAnswers(question.answers)
     }
     socket.on("new-question", listener)
@@ -145,7 +137,6 @@ export const Game = () => {
   // Handle the end of the current question
   useEffect(() => {
     const listener = () => {
-      setCurrentQuestion(undefined)
       setCurrentAnswers([])
       setSelectedAnswer(undefined)
       setCorrectAnswer(undefined)
