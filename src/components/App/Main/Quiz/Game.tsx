@@ -14,6 +14,7 @@ import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
 import { UserAnsweredNotification } from "./Game/UserAnsweredNotification"
+import { useTimer } from "hooks/useTimer"
 import React, { useContext, useEffect, useState } from "react"
 
 export interface Question {
@@ -82,7 +83,6 @@ export const Game = () => {
   const userId = useContext(User)
   const quizId = useContext(Quiz)
 
-  const [timer, setTimer] = useState(0)
   const [amountOfQuestions, setAmountOfQuestions] = useState("")
   const [currentQuestion, setCurrentQuestion] = useState<Question | undefined>()
   const [currentAnswers, setCurrentAnswers] = useState<Array<string>>()
@@ -92,19 +92,9 @@ export const Game = () => {
   const [usersAnswered, setUsersAnswered] = useState<UserType[]>([])
   const [amountOfMembers, setAmountOfMembers] = useState(0)
 
-  const usersNotAnswered = amountOfMembers - usersAnswered?.length
+  const timer = useTimer(currentQuestion?.number)
 
-  /* Update the timer */
-  const timerEvent = `timer-update-${quizId}-${currentQuestion?.number}`
-  useEffect(() => {
-    const listener = (time: string) => {
-      setTimer(parseInt(time))
-    }
-    socket.on(timerEvent, listener)
-    return () => {
-      socket.off(timerEvent, listener)
-    }
-  }, [socket, timer, currentQuestion])
+  const usersNotAnswered = amountOfMembers - usersAnswered?.length
 
   // Handle socket.io informing us of the amount of questions in the quiz
   useEffect(() => {
