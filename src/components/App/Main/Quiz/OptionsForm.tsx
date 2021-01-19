@@ -20,13 +20,8 @@ import { Party } from "contexts/PartyContext"
 import { Quiz } from "contexts/QuizContext"
 import { Socket } from "socket.io-client"
 import { SocketIO } from "contexts/SocketIOContext"
-import axios from "axios"
+import { useOpenTriviaCategories } from "hooks/useOpenTriviaCategories"
 import React, { ReactText, useContext, useEffect, useState } from "react"
-
-interface TriviaCategory {
-  id: number
-  name: string
-}
 
 interface QuizOptions {
   category: number | undefined
@@ -51,25 +46,6 @@ const FormLine = ({ children, ...rest }: SimpleGridProps) => {
       ))}
     </SimpleGrid>
   )
-}
-
-/**
- * Fetch an up to date list of categories from Open Trivia DB.
- *
- * Will return an empty array on any error.
- */
-const getCategories = async () => {
-  try {
-    const { data } = await axios.get("https://opentdb.com/api_category.php")
-    const categories: Array<TriviaCategory> = data.trivia_categories
-    const sortedCategories = categories.sort((a, b) =>
-      a.name !== b.name ? (a.name < b.name ? -1 : 1) : 0
-    )
-    return sortedCategories
-  } catch (error) {
-    console.error(error)
-    return []
-  }
 }
 
 /**
@@ -99,15 +75,11 @@ export const OptionsForm = () => {
   const [amountValue, setAmountValue] = useState("1")
   const [difficultyValue, setDifficultyValue] = useState<ReactText>("Random")
   const [typeValue, setTypeValue] = useState<ReactText>("Random")
-  const [selectCategories, setSelectCategories] = useState<TriviaCategory[]>()
   const [categoryId, setCategoryId] = useState<number | undefined>()
   const [difficulty, setDifficulty] = useState<string | undefined>()
   const [type, setType] = useState<string | undefined>()
 
-  // Categories for the category <select>
-  useEffect(() => {
-    getCategories().then(data => setSelectCategories(data))
-  }, [])
+  const selectCategories = useOpenTriviaCategories()
 
   // Keep track of options in correct form for API
   useEffect(() => {
