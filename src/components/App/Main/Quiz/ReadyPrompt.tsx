@@ -28,6 +28,13 @@ interface readyData {
   userId: string
 }
 
+interface Options {
+  category: string
+  amount: string
+  difficulty: string
+  type: string
+}
+
 // Handle user clicking the 'ready' button
 const handleReady = (socket: Socket, data: readyData) => {
   socket.emit("user-ready", data)
@@ -37,6 +44,24 @@ export const ReadyPrompt = (props: Props) => {
   const partyId = useContext(Party)
   const socket = useContext(SocketIO)
   const userId = useContext(UserId)
+
+  // Handle options being updated
+  const [chosenOptions, setChosenOptions] = useState<Options | undefined>()
+
+  useEffect(() => {
+    const optionsListener = (options: Options) => {
+      setChosenOptions(options)
+    }
+
+    socket.on("options-changed", optionsListener)
+
+    return () => {
+      socket.off("options-changed", optionsListener)
+    }
+  }, [])
+
+  const randomCategory = chosenOptions?.category === "Random"
+  const randomDifficulty = chosenOptions?.difficulty === "Random"
 
   // Handle user ready, waiting for other users to be ready
   const [usersReady, setUsersReady] = useState<Array<User>>([])
@@ -79,8 +104,17 @@ export const ReadyPrompt = (props: Props) => {
           <Flex alignItems="center" direction="column" px={5} py={9}>
             {usersReady.length === 0 ? (
               <>
-                <Text fontSize="2xl" mb={4}>
-                  Are you ready...?
+              <Text textAlign="center">
+                {chosenOptions?.amount} questions on{" "}
+                <Text as="span" fontStyle="italic" fontWeight="bold">
+                  {randomCategory
+                    ? "any subject"
+                    : `${chosenOptions?.category}`}
+                </Text>
+                ...
+              </Text>
+              <Text fontSize="3xl" fontWeight="bold" my={4}>
+                Are you ready?
                 </Text>
                 <Button
                   colorScheme="brand"
