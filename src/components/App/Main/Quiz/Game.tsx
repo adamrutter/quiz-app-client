@@ -10,7 +10,8 @@ import {
   useToast
 } from "@chakra-ui/react"
 import { Party } from "contexts/PartyContext"
-import { Question } from "types"
+import { PartyMembers } from "contexts/PartyMembersContext"
+import { Question, User as UserType } from "types"
 import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
@@ -20,12 +21,8 @@ import { useAnswers } from "hooks/useAnswers"
 import { useCorrectAnswer } from "hooks/useCorrectAnswer"
 import { useQuestion } from "hooks/useQuestion"
 import { useTimer } from "hooks/useTimer"
+import { useUsersAnswered } from "hooks/useUsersAnswered"
 import React, { useContext, useEffect, useState } from "react"
-
-interface UserType {
-  id: string
-  name: string
-}
 
 /**
  * Determine whether the button should be disabled.
@@ -78,18 +75,19 @@ export const Game = () => {
   const partyId = useContext(Party)
   const userId = useContext(User)
   const quizId = useContext(Quiz)
+  const partyMembers = useContext(PartyMembers)
 
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
   const [remainingAnswersPrompt, setRemainingAnswersPrompt] = useState(false)
-  const [usersAnswered, setUsersAnswered] = useState<UserType[]>([])
-  const [amountOfMembers, setAmountOfMembers] = useState(0)
 
   const currentQuestion = useQuestion()
   const currentAnswers = useAnswers()
   const correctAnswer = useCorrectAnswer()
   const timer = useTimer(currentQuestion?.number)
   const amountOfQuestions = useAmountOfQuestions()
+  const usersAnswered = useUsersAnswered()
 
+  const amountOfMembers = partyMembers.length
   const usersNotAnswered = amountOfMembers - usersAnswered?.length
 
   // Handle an answer being chosen by the user
@@ -118,7 +116,6 @@ export const Game = () => {
   useEffect(() => {
     const listener = () => {
       setSelectedAnswer(undefined)
-      setUsersAnswered([])
     }
     socket.on("finish-question", listener)
     return () => {
@@ -129,9 +126,6 @@ export const Game = () => {
   // Handle being told a user has answered
   useEffect(() => {
     const listener = (thisUser: UserType, totalUsers: string) => {
-      setAmountOfMembers(parseInt(totalUsers))
-      setUsersAnswered(oldState => [...oldState, thisUser])
-
       // Send a notification if the user answering wasn't this user
       if (thisUser.id !== userId) {
         toast({
@@ -158,7 +152,7 @@ export const Game = () => {
     } else {
       setRemainingAnswersPrompt(false)
     }
-  }, [usersAnswered])
+  }, [usersAnswered, selectedAnswer])
 
   // Return the color scheme the button should use.
   const buttonColorScheme = (index: number): string => {

@@ -6,3 +6,8 @@ export interface Question {
   number: string
   total: string
 }
+
+export interface User {
+  id: string
+  name: string
+}
