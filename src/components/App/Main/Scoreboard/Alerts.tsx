@@ -27,6 +27,10 @@ export const Alerts = ({ scores }: Props) => {
   const socket = useContext(SocketIO)
   const [quizFinished, setQuizFinished] = useState(false)
 
+  const winningUsers = scores?.filter(user => user.score === scores[0].score)
+  const joinedWinnersString =
+    winningUsers && joinArray(winningUsers.map(user => user.name))
+
   // Set up listeners
   useEffect(() => {
     const quizStartListener = () => {
@@ -44,10 +48,6 @@ export const Alerts = ({ scores }: Props) => {
       socket.off("quiz-will-end", quizWillFinishListener)
     }
   }, [])
-
-  const winningUsers = scores?.filter(user => user.score === scores[0].score)
-  const joinedWinnersString =
-    winningUsers && joinArray(winningUsers.map(user => user.name))
 
   return (
     <>
