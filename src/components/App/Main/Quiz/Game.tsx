@@ -16,6 +16,7 @@ import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
 import { UserAnsweredNotification } from "./Game/UserAnsweredNotification"
 import { useAmountOfQuestions } from "hooks/useAmountOfQuestions"
+import { useAnswers } from "hooks/useAnswers"
 import { useQuestion } from "hooks/useQuestion"
 import { useTimer } from "hooks/useTimer"
 import React, { useContext, useEffect, useState } from "react"
@@ -77,7 +78,6 @@ export const Game = () => {
   const userId = useContext(User)
   const quizId = useContext(Quiz)
 
-  const [currentAnswers, setCurrentAnswers] = useState<Array<string>>()
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
   const [correctAnswer, setCorrectAnswer] = useState<number | undefined>()
   const [remainingAnswersPrompt, setRemainingAnswersPrompt] = useState(false)
@@ -85,21 +85,11 @@ export const Game = () => {
   const [amountOfMembers, setAmountOfMembers] = useState(0)
 
   const currentQuestion = useQuestion()
+  const currentAnswers = useAnswers()
   const timer = useTimer(currentQuestion?.number)
   const amountOfQuestions = useAmountOfQuestions()
 
   const usersNotAnswered = amountOfMembers - usersAnswered?.length
-
-  // Handle being sent a question by the socket.io server
-  useEffect(() => {
-    const listener = (question: Question) => {
-      setCurrentAnswers(question.answers)
-    }
-    socket.on("new-question", listener)
-    return () => {
-      socket.off("new-question", listener)
-    }
-  }, [socket])
 
   // Handle an answer being chosen by the user
   const handleAnswer = (answerIndex: number) => {
@@ -137,7 +127,6 @@ export const Game = () => {
   // Handle the end of the current question
   useEffect(() => {
     const listener = () => {
-      setCurrentAnswers([])
       setSelectedAnswer(undefined)
       setCorrectAnswer(undefined)
       setUsersAnswered([])
