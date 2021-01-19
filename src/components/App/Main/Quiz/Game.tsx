@@ -175,9 +175,10 @@ export const Game = () => {
   useEffect(() => {
     const notAllUsersHaveAnswered = usersAnswered?.length < amountOfMembers
     const thisUserHasAnswered = selectedAnswer !== undefined
+    const userNotLastToAnswer = amountOfMembers - 1 === usersAnswered?.length
 
     if (notAllUsersHaveAnswered && thisUserHasAnswered) {
-      setRemainingAnswersPrompt(true)
+      userNotLastToAnswer && setRemainingAnswersPrompt(true)
     } else {
       setRemainingAnswersPrompt(false)
     }
