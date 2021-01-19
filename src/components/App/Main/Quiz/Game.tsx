@@ -68,6 +68,33 @@ const difficultyColor = (question: Question) => {
   return "brand"
 }
 
+/**
+ * Return a color depending on answer state
+ * @param thisAnswer
+ * @param selectedAnswer
+ * @param correctAnswer
+ */
+const buttonColorScheme = (
+  thisAnswer: number,
+  selectedAnswer: number | undefined,
+  correctAnswer: number | undefined
+): string => {
+  const isSelectedAnswer = thisAnswer === selectedAnswer
+  const answerIsCorrect = thisAnswer === correctAnswer
+  const answerIsIncorrect =
+    correctAnswer !== undefined && correctAnswer !== thisAnswer
+
+  if (answerIsCorrect) {
+    return "green"
+  } else if (isSelectedAnswer && answerIsIncorrect) {
+    return "red"
+  } else if (isSelectedAnswer) {
+    return "brand"
+  } else {
+    return "gray"
+  }
+}
+
 export const Game = () => {
   const toast = useToast()
 
@@ -117,7 +144,9 @@ export const Game = () => {
     const listener = () => {
       setSelectedAnswer(undefined)
     }
+
     socket.on("finish-question", listener)
+
     return () => {
       socket.off("finish-question", listener)
     }
@@ -154,24 +183,6 @@ export const Game = () => {
     }
   }, [usersAnswered, selectedAnswer])
 
-  // Return the color scheme the button should use.
-  const buttonColorScheme = (index: number): string => {
-    const isSelectedAnswer = index === selectedAnswer
-    const answerIsCorrect = index === correctAnswer
-    const answerIsIncorrect =
-      correctAnswer !== undefined && correctAnswer !== index
-
-    if (answerIsCorrect) {
-      return "green"
-    } else if (isSelectedAnswer && answerIsIncorrect) {
-      return "red"
-    } else if (isSelectedAnswer) {
-      return "brand"
-    } else {
-      return "gray"
-    }
-  }
-
   return (
     <>
       {currentQuestion && (
@@ -206,7 +217,11 @@ export const Game = () => {
                 return (
                   <Answer
                     answer={answer}
-                    colorScheme={buttonColorScheme(index)}
+                    colorScheme={buttonColorScheme(
+                      index,
+                      selectedAnswer,
+                      correctAnswer
+                    )}
                     disabled={isButtonDisabled(
                       index,
                       selectedAnswer,
