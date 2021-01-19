@@ -12,6 +12,7 @@ import {
 import { Party } from "contexts/PartyContext"
 import { Socket } from "socket.io-client"
 import { SocketIO } from "contexts/SocketIOContext"
+import { useChosenOptions } from "hooks/useChosenOptions"
 import { User as UserId } from "contexts/UserContext"
 import React, { useContext, useEffect, useState } from "react"
 
@@ -28,13 +29,6 @@ interface readyData {
   userId: string
 }
 
-interface Options {
-  category: string
-  amount: string
-  difficulty: string
-  type: string
-}
-
 // Handle user clicking the 'ready' button
 const handleReady = (socket: Socket, data: readyData) => {
   socket.emit("user-ready", data)
@@ -46,25 +40,13 @@ export const ReadyPrompt = (props: Props) => {
   const socket = useContext(SocketIO)
   const userId = useContext(UserId)
 
-  const [chosenOptions, setChosenOptions] = useState<Options | undefined>()
   const [usersReady, setUsersReady] = useState<Array<User>>([])
   const [percentUsersReady, setPercentUsersReady] = useState(0)
 
+  const chosenOptions = useChosenOptions()
+
   const randomCategory = chosenOptions?.category === "Random"
   const randomDifficulty = chosenOptions?.difficulty === "Random"
-
-  // Handle options being updated
-  useEffect(() => {
-    const optionsListener = (options: Options) => {
-      setChosenOptions(options)
-    }
-
-    socket.on("options-changed", optionsListener)
-
-    return () => {
-      socket.off("options-changed", optionsListener)
-    }
-  }, [])
 
   // Handle user ready, waiting for other users to be ready
   useEffect(() => {

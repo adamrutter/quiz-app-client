@@ -1,33 +1,14 @@
 import { Box, Progress, Text } from "@chakra-ui/react"
 import { default as indefiniteArticle } from "indefinite"
 import { PanaHavingFun } from "svg/PanaHavingFun"
-import { SocketIO } from "contexts/SocketIOContext"
+import { useChosenOptions } from "hooks/useChosenOptions"
 import { usePartyLeader } from "hooks/usePartyLeader"
-import React, { useContext, useEffect, useState } from "react"
+import React from "react"
 
-interface Options {
-  category: string
-  amount: string
-  difficulty: string
-  type: string
-}
 export const WaitForStart = () => {
-  const socket = useContext(SocketIO)
   const partyLeader = usePartyLeader()
 
-  const [chosenOptions, setChosenOptions] = useState<Options | undefined>()
-
-  useEffect(() => {
-    const optionsListener = (options: Options) => {
-      setChosenOptions(options)
-    }
-
-    socket.on("options-changed", optionsListener)
-
-    return () => {
-      socket.off("options-changed", optionsListener)
-    }
-  }, [])
+  const chosenOptions = useChosenOptions()
 
   const categoryIndefiniteArticle = chosenOptions
     ? indefiniteArticle(chosenOptions?.category, { articleOnly: true })
