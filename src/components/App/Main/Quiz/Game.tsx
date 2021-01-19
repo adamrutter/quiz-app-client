@@ -143,6 +143,7 @@ export const Game = () => {
   useEffect(() => {
     const listener = () => {
       setSelectedAnswer(undefined)
+      setRemainingAnswersPrompt(false)
     }
 
     socket.on("finish-question", listener)
@@ -175,14 +176,13 @@ export const Game = () => {
   useEffect(() => {
     const notAllUsersHaveAnswered = usersAnswered?.length < amountOfMembers
     const thisUserHasAnswered = selectedAnswer !== undefined
-    const userNotLastToAnswer = amountOfMembers - 1 === usersAnswered?.length
 
     if (notAllUsersHaveAnswered && thisUserHasAnswered) {
-      userNotLastToAnswer && setRemainingAnswersPrompt(true)
+      setRemainingAnswersPrompt(true)
     } else {
       setRemainingAnswersPrompt(false)
     }
-  }, [usersAnswered, selectedAnswer])
+  }, [usersAnswered])
 
   return (
     <>
