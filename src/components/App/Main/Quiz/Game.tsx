@@ -1,6 +1,14 @@
 import { Answer } from "./Game/Answer"
 import { Header } from "./Game/Header"
-import { Alert, SimpleGrid, Spinner, Text, useToast } from "@chakra-ui/react"
+import {
+  Alert,
+  Badge,
+  Box,
+  Center,
+  SimpleGrid,
+  Spinner,
+  useToast
+} from "@chakra-ui/react"
 import { Party } from "contexts/PartyContext"
 import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
@@ -53,6 +61,17 @@ const isButtonDisabled = (
   } else {
     return false
   }
+}
+
+/**
+ * Return a color for the given question's difficulty rating
+ * @param question
+ */
+const difficultyColor = (question: Question) => {
+  if (question.difficulty === "easy") return "green"
+  if (question.difficulty === "medium") return "orange"
+  if (question.difficulty === "hard") return "red"
+  return "brand"
 }
 
 export const Game = () => {
@@ -229,29 +248,37 @@ export const Game = () => {
             currentQuestionNumber={currentQuestion.number}
             time={timer}
           />
-          <Text fontSize="xl" my={6}>
-            {currentQuestion?.question}
-          </Text>
-          <SimpleGrid columns={[1]} my={6} spacing={2}>
-            {currentAnswers?.map((answer, index) => {
-              return (
-                <Answer
-                  answer={answer}
-                  colorScheme={buttonColorScheme(index)}
-                  disabled={isButtonDisabled(
-                    index,
-                    selectedAnswer,
-                    correctAnswer,
-                    timer
-                  )}
-                  key={index}
-                  answerIndex={index}
-                  onClick={handleAnswer}
-                  selected={index === selectedAnswer ? true : false}
-                />
-              )
-            })}
-          </SimpleGrid>
+          <Box my={7}>
+            <Center>
+              <Box fontWeight="bold">{currentQuestion?.category}</Box>
+              <Badge colorScheme={difficultyColor(currentQuestion)} ml={2}>
+                {currentQuestion?.difficulty}
+              </Badge>
+            </Center>
+            <Box fontSize="xl" my={5}>
+              {currentQuestion?.question}
+            </Box>
+            <SimpleGrid columns={[1]} my={7} spacing={2}>
+              {currentAnswers?.map((answer, index) => {
+                return (
+                  <Answer
+                    answer={answer}
+                    colorScheme={buttonColorScheme(index)}
+                    disabled={isButtonDisabled(
+                      index,
+                      selectedAnswer,
+                      correctAnswer,
+                      timer
+                    )}
+                    key={index}
+                    answerIndex={index}
+                    onClick={handleAnswer}
+                    selected={index === selectedAnswer ? true : false}
+                  />
+                )
+              })}
+            </SimpleGrid>
+          </Box>
         </>
       )}
     </>
