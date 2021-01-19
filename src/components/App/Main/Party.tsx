@@ -1,4 +1,5 @@
 import { ChangeName } from "./Party/ChangeName"
+import { CreateNewParty } from "./Party/CreateNewParty"
 import { Divider } from "@chakra-ui/react"
 import { InviteFriends } from "./Party/InviteFriends"
 import { PartyMembers } from "./Party/PartyMembers"
@@ -11,6 +12,7 @@ export const Party = () => {
       <ChangeName />
       <Divider my={7} />
       <InviteFriends />
+      <CreateNewParty />
     </>
   )
 }
