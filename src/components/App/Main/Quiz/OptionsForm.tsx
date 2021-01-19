@@ -93,30 +93,30 @@ const submitForm = (
 export const OptionsForm = () => {
   const partyId = useContext(Party)
   const quizId = useContext(Quiz)
-
-  // The socket.io client
   const socket = useContext(SocketIO)
 
-  // Form values
   const [categoryValue, setCategoryValue] = useState("Random")
   const [amountValue, setAmountValue] = useState("1")
   const [difficultyValue, setDifficultyValue] = useState<ReactText>("Random")
   const [typeValue, setTypeValue] = useState<ReactText>("Random")
+  const [selectCategories, setSelectCategories] = useState<TriviaCategory[]>()
+  const [categoryId, setCategoryId] = useState<number | undefined>()
+  const [difficulty, setDifficulty] = useState<string | undefined>()
+  const [type, setType] = useState<string | undefined>()
 
   // Categories for the category <select>
-  const [categories, setCategories] = useState<Array<TriviaCategory>>()
   useEffect(() => {
-    getCategories().then(data => setCategories(data))
+    getCategories().then(data => setSelectCategories(data))
   }, [])
 
   // Keep track of options in correct form for API
-  const [categoryId, setCategoryId] = useState<number | undefined>()
   useEffect(() => {
-    const obj = categories?.find(category => category.name === categoryValue)
+    const obj = selectCategories?.find(
+      category => category.name === categoryValue
+    )
     setCategoryId(obj?.id)
-  }, [categories, categoryValue])
+  }, [selectCategories, categoryValue])
 
-  const [difficulty, setDifficulty] = useState<string | undefined>()
   useEffect(() => {
     const str =
       difficultyValue === "Random"
@@ -125,7 +125,6 @@ export const OptionsForm = () => {
     setDifficulty(str)
   }, [difficultyValue])
 
-  const [type, setType] = useState<string | undefined>()
   useEffect(() => {
     let str
 
@@ -198,8 +197,8 @@ export const OptionsForm = () => {
                 value={categoryValue}
               >
                 <option value="Random">Random</option>
-                {categories &&
-                  categories.map((category, index) => (
+                {selectCategories &&
+                  selectCategories.map((category, index) => (
                     <option key={index} value={category.name}>
                       {category.name}
                     </option>
