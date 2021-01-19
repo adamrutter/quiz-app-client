@@ -89,7 +89,6 @@ export const OptionsForm = () => {
       difficulty: difficultyFormValue,
       type: typeFormValue
     }
-    console.log(options)
     socket.emit("party-leader-quiz-options", options, partyId)
   }, [categoryFormValue, amountFormValue, difficultyFormValue, typeFormValue])
 
