@@ -113,7 +113,7 @@ export const ReadyPrompt = (props: Props) => {
                   </Text>
                   ...
                 </Text>
-                <Text fontSize="3xl" fontWeight="bold" my={4}>
+                <Text fontSize="3xl" fontWeight="bold" mb={4} mt={3}>
                   Are you ready?
                 </Text>
                 <Button
