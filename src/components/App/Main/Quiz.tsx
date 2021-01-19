@@ -47,7 +47,13 @@ export const Quiz = () => {
         partyLeader &&
         (userId === partyLeader?.id ? <OptionsForm /> : <WaitForStart />)}
       {!isLoading && !partyLeader && (
-        <Alert my={3} status="error" textAlign="left" variant="left-accent">
+        <Alert
+          mb={6}
+          mt={3}
+          status="error"
+          textAlign="left"
+          variant="left-accent"
+        >
           <AlertIcon />
           There is no party leader. Please either create or join another party.
         </Alert>
