@@ -99,22 +99,22 @@ export const ReadyPrompt = (props: Props) => {
   return (
     <Modal isOpen={props.isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
-      <ModalContent mx={2}>
+      <ModalContent borderTopColor="brand.400" borderTopWidth={7} mx={2}>
         <ModalBody>
           <Flex alignItems="center" direction="column" px={5} py={9}>
             {usersReady.length === 0 ? (
               <>
-              <Text textAlign="center">
-                {chosenOptions?.amount} questions on{" "}
-                <Text as="span" fontStyle="italic" fontWeight="bold">
-                  {randomCategory
-                    ? "any subject"
-                    : `${chosenOptions?.category}`}
+                <Text textAlign="center">
+                  {chosenOptions?.amount} questions on{" "}
+                  <Text as="span" fontStyle="italic" fontWeight="bold">
+                    {randomCategory
+                      ? "any subject"
+                      : `${chosenOptions?.category}`}
+                  </Text>
+                  ...
                 </Text>
-                ...
-              </Text>
-              <Text fontSize="3xl" fontWeight="bold" my={4}>
-                Are you ready?
+                <Text fontSize="3xl" fontWeight="bold" my={4}>
+                  Are you ready?
                 </Text>
                 <Button
                   colorScheme="brand"
