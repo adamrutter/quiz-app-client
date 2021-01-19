@@ -11,11 +11,11 @@ import {
 } from "@chakra-ui/react"
 import { FaUserAlt } from "react-icons/fa"
 import { GiQueenCrown } from "react-icons/gi"
-import { SocketIO } from "contexts/SocketIOContext"
 import { UsernameItem } from "./shared/UsernameItem"
 import { MdGrade } from "react-icons/md"
-import React, { useContext, useEffect, useState } from "react"
+import React from "react"
 import { Alerts } from "./Scoreboard/Alerts"
+import { useScores } from "hooks/useScores"
 
 export interface UserScore {
   name: string
@@ -25,18 +25,7 @@ export interface UserScore {
 }
 
 export const Scoreboard = () => {
-  const socket = useContext(SocketIO)
-  const [scores, setScores] = useState<Array<UserScore>>()
-
-  useEffect(() => {
-    const scoreboardListener = (scorecard: Array<UserScore>) => {
-      setScores(scorecard)
-    }
-    socket.on("updated-scorecard", scoreboardListener)
-    return () => {
-      socket.off("updated-scorecard", scoreboardListener)
-    }
-  }, [])
+  const scores = useScores()
 
   return (
     <>
