@@ -7,6 +7,7 @@ import {
   useColorModeValue,
   VisuallyHidden
 } from "@chakra-ui/react"
+import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Party as PartyId } from "contexts/PartyContext"
 import { MdContentCopy } from "react-icons/md"
 import React, { useContext, useRef } from "react"
@@ -19,15 +20,6 @@ export const InviteFriends = () => {
 
   const linkContainerBg = useColorModeValue("gray.50", "gray.700")
   const linkContainerBorderColor = useColorModeValue("gray.200", "gray.600")
-
-  const clickHandler = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    if (linkRef.current !== null) {
-      linkRef.current.select()
-      document.execCommand("copy")
-    }
-  }
 
   return (
     <>
@@ -55,15 +47,16 @@ export const InviteFriends = () => {
         >
           {joinUrl}
         </Code>
-        <Button
-          colorScheme="brand"
-          leftIcon={<MdContentCopy />}
-          onClick={clickHandler}
-          px={5}
-          size="sm"
-        >
-          Copy link
-        </Button>
+        <CopyToClipboard text={joinUrl}>
+          <Button
+            colorScheme="brand"
+            leftIcon={<MdContentCopy />}
+            px={5}
+            size="sm"
+          >
+            Copy link
+          </Button>
+        </CopyToClipboard>
       </HStack>
       <VisuallyHidden>
         <Input aria-hidden="true" ref={linkRef} value={joinUrl} />
