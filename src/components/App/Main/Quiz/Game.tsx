@@ -17,6 +17,7 @@ import { User } from "contexts/UserContext"
 import { UserAnsweredNotification } from "./Game/UserAnsweredNotification"
 import { useAmountOfQuestions } from "hooks/useAmountOfQuestions"
 import { useAnswers } from "hooks/useAnswers"
+import { useCorrectAnswer } from "hooks/useCorrectAnswer"
 import { useQuestion } from "hooks/useQuestion"
 import { useTimer } from "hooks/useTimer"
 import React, { useContext, useEffect, useState } from "react"
@@ -79,13 +80,13 @@ export const Game = () => {
   const quizId = useContext(Quiz)
 
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
-  const [correctAnswer, setCorrectAnswer] = useState<number | undefined>()
   const [remainingAnswersPrompt, setRemainingAnswersPrompt] = useState(false)
   const [usersAnswered, setUsersAnswered] = useState<UserType[]>([])
   const [amountOfMembers, setAmountOfMembers] = useState(0)
 
   const currentQuestion = useQuestion()
   const currentAnswers = useAnswers()
+  const correctAnswer = useCorrectAnswer()
   const timer = useTimer(currentQuestion?.number)
   const amountOfQuestions = useAmountOfQuestions()
 
@@ -113,22 +114,10 @@ export const Game = () => {
     }
   }, [selectedAnswer])
 
-  // Handle correct answer being sent from socket.io server
-  useEffect(() => {
-    const listener = (correctAnswerIndex: string) => {
-      setCorrectAnswer(parseInt(correctAnswerIndex))
-    }
-    socket.on("correct-answer", listener)
-    return () => {
-      socket.off("correct-answer", listener)
-    }
-  }, [currentAnswers, socket])
-
   // Handle the end of the current question
   useEffect(() => {
     const listener = () => {
       setSelectedAnswer(undefined)
-      setCorrectAnswer(undefined)
       setUsersAnswered([])
     }
     socket.on("finish-question", listener)
