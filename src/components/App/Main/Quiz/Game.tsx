@@ -1,4 +1,5 @@
 import { Answer } from "./Game/Answer"
+import { decode } from "he"
 import { Header } from "./Game/Header"
 import {
   Alert,
@@ -211,13 +212,13 @@ export const Game = () => {
               </Badge>
             </Center>
             <Box fontSize="xl" my={5}>
-              {currentQuestion?.question}
+              {decode(currentQuestion?.question)}
             </Box>
             <SimpleGrid columns={[1]} my={7} spacing={2}>
               {currentAnswers?.map((answer, index) => {
                 return (
                   <Answer
-                    answer={answer}
+                    answer={decode(answer)}
                     colorScheme={buttonColorScheme(
                       index,
                       selectedAnswer,
