@@ -41,13 +41,19 @@ const handleReady = (socket: Socket, data: readyData) => {
 }
 
 export const ReadyPrompt = (props: Props) => {
+  const { onClose } = useDisclosure()
   const partyId = useContext(Party)
   const socket = useContext(SocketIO)
   const userId = useContext(UserId)
 
-  // Handle options being updated
   const [chosenOptions, setChosenOptions] = useState<Options | undefined>()
+  const [usersReady, setUsersReady] = useState<Array<User>>([])
+  const [percentUsersReady, setPercentUsersReady] = useState(0)
 
+  const randomCategory = chosenOptions?.category === "Random"
+  const randomDifficulty = chosenOptions?.difficulty === "Random"
+
+  // Handle options being updated
   useEffect(() => {
     const optionsListener = (options: Options) => {
       setChosenOptions(options)
@@ -60,13 +66,7 @@ export const ReadyPrompt = (props: Props) => {
     }
   }, [])
 
-  const randomCategory = chosenOptions?.category === "Random"
-  const randomDifficulty = chosenOptions?.difficulty === "Random"
-
   // Handle user ready, waiting for other users to be ready
-  const [usersReady, setUsersReady] = useState<Array<User>>([])
-  const [percentUsersReady, setPercentUsersReady] = useState(0)
-
   useEffect(() => {
     const listener = (users: Array<User>) => setUsersReady(users)
     socket.on("these-users-ready", listener)
@@ -93,8 +93,6 @@ export const ReadyPrompt = (props: Props) => {
       socket.off("all-users-ready", listener)
     }
   }, [])
-
-  const { onClose } = useDisclosure()
 
   return (
     <Modal isOpen={props.isOpen} onClose={onClose} size="xl">
