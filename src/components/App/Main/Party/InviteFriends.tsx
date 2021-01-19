@@ -31,9 +31,10 @@ export const InviteFriends = () => {
 
   return (
     <>
-      <Text>
+      <Text align="left">Invite friends</Text>
+      <Text align="left" color="gray.500" fontSize="xs">
         Your friends can join your party and compete against you by visiting
-        this link:
+        this link
       </Text>
       <HStack
         bg={linkContainerBg}
@@ -41,7 +42,7 @@ export const InviteFriends = () => {
         borderColor={linkContainerBorderColor}
         borderRadius="md"
         colorScheme="gray"
-        my={4}
+        my={3}
         p={1}
         pl={3}
       >
