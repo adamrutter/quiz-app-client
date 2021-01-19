@@ -3,9 +3,7 @@ import {
   Flex,
   Heading,
   List,
-  ListIcon,
   ListItem,
-  Text,
   useColorModeValue
 } from "@chakra-ui/react"
 import { FaUserAlt, FaUserTimes } from "react-icons/fa"
@@ -24,7 +22,6 @@ export const PartyMembers = () => {
   const userId = useContext(User)
   const partyId = useContext(Party)
   const partyMembers = useContext(PartyMembersContext)
-
   const partyLeader = usePartyLeader()
 
   const kickMember = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
