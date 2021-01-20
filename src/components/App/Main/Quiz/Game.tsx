@@ -21,6 +21,7 @@ import { useAmountOfQuestions } from "hooks/useAmountOfQuestions"
 import { useAnswers } from "hooks/useAnswers"
 import { useCorrectAnswer } from "hooks/useCorrectAnswer"
 import { useQuestion } from "hooks/useQuestion"
+import { useQuestionTimeLimit } from "hooks/useQuestionTimeLimit"
 import { useTimer } from "hooks/useTimer"
 import { useUsersAnswered } from "hooks/useUsersAnswered"
 import React, { useContext, useEffect, useState } from "react"
@@ -36,12 +37,12 @@ const isButtonDisabled = (
   index: number,
   selectedAnswer: number | undefined,
   correctAnswer: number | undefined,
-  timer: number
+  timer: number | undefined
 ): boolean => {
   const answerHasBeenSelected = selectedAnswer !== undefined
   const isSelectedAnswer = index === selectedAnswer
   const isCorrectAnswer = index === correctAnswer
-  const timerExpired = timer <= 0
+  const timerExpired = timer && timer <= 0
 
   if (answerHasBeenSelected) {
     if (isSelectedAnswer) {
@@ -114,6 +115,7 @@ export const Game = () => {
   const timer = useTimer(currentQuestion?.number)
   const amountOfQuestions = useAmountOfQuestions()
   const usersAnswered = useUsersAnswered()
+  const timeLimit = useQuestionTimeLimit()
 
   const amountOfMembers = partyMembers.length
   const usersNotAnswered = amountOfMembers - usersAnswered?.length
@@ -203,6 +205,7 @@ export const Game = () => {
             amountOfQuestions={amountOfQuestions}
             currentQuestionNumber={currentQuestion.number}
             time={timer}
+            timeLimit={timeLimit}
           />
           <Box my={7}>
             <Center>

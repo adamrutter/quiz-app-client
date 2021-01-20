@@ -1,14 +1,20 @@
-import { Badge, Box, Divider, Flex, HStack } from "@chakra-ui/react"
+import { Badge, Box, Divider, Flex, HStack, Progress } from "@chakra-ui/react"
 import { Timer } from "./Timer"
+import { useIsTimeLow } from "hooks/useIsTimeLow"
 import React from "react"
 
 interface Props {
   amountOfQuestions: string
   currentQuestionNumber: string
-  time: number
+  time: number | undefined
+  timeLimit: number | undefined
 }
 
 export const Header = (props: Props) => {
+  const timeLow = useIsTimeLow(props.time)
+  const timeLeftPercentage =
+    props.time && props.timeLimit && props.time / props.timeLimit
+
   return (
     <>
       <Flex justifyContent="space-between">
@@ -28,7 +34,16 @@ export const Header = (props: Props) => {
         </HStack>
         <Timer time={props.time} />
       </Flex>
-      <Divider mt={4} />
+      <Progress
+        colorScheme={timeLow ? "red" : "green"}
+        display="flex"
+        max={1}
+        min={0}
+        mt={4}
+        size="xs"
+        value={timeLeftPercentage === undefined ? 1 : timeLeftPercentage}
+      />
+      <Divider />
     </>
   )
 }

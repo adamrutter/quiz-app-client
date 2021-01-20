@@ -6,7 +6,7 @@ export const useTimer = (questionNumber: string | undefined) => {
   const socket = useContext(SocketIO)
   const quizId = useContext(Quiz)
 
-  const [timerValue, setTimerValue] = useState(0)
+  const [timerValue, setTimerValue] = useState<number | undefined>()
 
   const timerEvent = `timer-update-${quizId}-${questionNumber}`
 
@@ -14,9 +14,16 @@ export const useTimer = (questionNumber: string | undefined) => {
     const listener = (time: string) => {
       setTimerValue(parseInt(time))
     }
+    const finishQuestionListener = () => {
+      setTimerValue(undefined)
+    }
+
     socket.on(timerEvent, listener)
+    socket.on("finish-question", finishQuestionListener)
+
     return () => {
       socket.off(timerEvent, listener)
+      socket.on("finish-question", finishQuestionListener)
     }
   }, [questionNumber])
 

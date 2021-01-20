@@ -1,12 +1,15 @@
 import { Badge, Box, HStack, useColorMode } from "@chakra-ui/react"
+import { useIsTimeLow } from "hooks/useIsTimeLow"
 import React from "react"
 
 interface Props {
-  time: number
+  time: number | undefined
 }
 
 export const Timer = (props: Props) => {
   const { colorMode } = useColorMode()
+  const timeLow = useIsTimeLow(props.time)
+
   const color = {
     danger: colorMode === "light" ? "red.600" : "red.400",
     normal: colorMode === "light" ? "black" : "white",
@@ -18,20 +21,20 @@ export const Timer = (props: Props) => {
       <Box>
         <Box
           as="span"
-          color={props.time < 5 ? color.danger : color.normal}
+          color={timeLow ? color.danger : color.normal}
           fontWeight="bold"
         >
           {props.time}{" "}
         </Box>
         <Box
           as="span"
-          color={props.time < 5 ? color.danger : color.subtle}
+          color={timeLow ? color.danger : color.subtle}
           fontSize="sm"
         >
           seconds
         </Box>
       </Box>
-      <Badge colorScheme={props.time < 5 ? "red" : "brand"} variant="solid">
+      <Badge colorScheme={timeLow ? "red" : "brand"} variant="solid">
         Time left
       </Badge>
     </HStack>
