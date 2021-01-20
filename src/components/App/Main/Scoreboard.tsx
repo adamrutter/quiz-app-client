@@ -7,7 +7,8 @@ import {
   Flex,
   Heading,
   List,
-  ListItem
+  ListItem,
+  useColorModeValue
 } from "@chakra-ui/react"
 import { FaUserAlt } from "react-icons/fa"
 import { GiQueenCrown } from "react-icons/gi"
@@ -26,6 +27,7 @@ export interface UserScore {
 
 export const Scoreboard = () => {
   const scores = useScores()
+  const oddLineColor = useColorModeValue("gray.100", "gray.700")
 
   return (
     <>
@@ -40,7 +42,7 @@ export const Scoreboard = () => {
           scores.map((user, index) => {
             const indexIsOdd = Math.abs(index % 2) === 1
             return (
-              <ListItem bg={indexIsOdd ? "gray.100" : "none"} px={4} py={2}>
+              <ListItem bg={indexIsOdd ? oddLineColor : "none"} px={4} py={2}>
                 <Flex align="center" justify="space-between">
                   <UsernameItem
                     color={index === 0 ? "brand.400" : "gray.500"}
