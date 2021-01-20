@@ -85,7 +85,7 @@ export const ChangeName = () => {
             Please enter a display name
           </Alert>
         )}
-        <Text align="left" color="gray.500" fontSize="xs" mt={2}>
+        <Text align="left" color="gray.500" fontSize="xs" mt={4}>
           How you will appear on the scoreboard and to your friends.
         </Text>
       </form>
