@@ -1,8 +1,8 @@
 import { Answer } from "./Game/Answer"
+import { CollapsibleAlert } from "components/App/shared/CollapsibleAlert"
 import { decode } from "he"
 import { Header } from "./Game/Header"
 import {
-  Alert,
   Badge,
   Box,
   Center,
@@ -185,16 +185,18 @@ export const Game = () => {
     <>
       {currentQuestion && (
         <>
-          {showRemainingAnswersAlert && (
-            <Alert colorScheme="brand" mb={6}>
-              <Spinner mr={2} size="sm" speed="1.5s" />
-              Waiting for{" "}
-              {usersNotAnswered === 1
-                ? "1 more person"
-                : `${usersNotAnswered} more people`}{" "}
-              to answer...
-            </Alert>
-          )}
+          <CollapsibleAlert
+            colorScheme="brand"
+            isOpen={showRemainingAnswersAlert}
+            mb={6}
+          >
+            <Spinner mr={2} size="sm" speed="1.5s" />
+            Waiting for{" "}
+            {usersNotAnswered === 1
+              ? "1 more person"
+              : `${usersNotAnswered} more people`}{" "}
+            to answer...
+          </CollapsibleAlert>
           <Header
             amountOfQuestions={amountOfQuestions}
             currentQuestionNumber={currentQuestion.number}

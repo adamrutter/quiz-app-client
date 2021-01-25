@@ -1,5 +1,4 @@
 import {
-  Alert,
   AlertIcon,
   Box,
   Button,
@@ -11,6 +10,7 @@ import {
   Wrap,
   WrapItem
 } from "@chakra-ui/react"
+import { CollapsibleAlert } from "components/App/shared/CollapsibleAlert"
 import { DisplayName } from "contexts/DisplayNameContext"
 import { FaUserEdit } from "react-icons/fa"
 import { Party } from "contexts/PartyContext"
@@ -79,12 +79,16 @@ export const ChangeName = () => {
             </Button>
           </WrapItem>
         </Wrap>
-        {formInvalid && (
-          <Alert my={3} size="sm" status="error" variant="left-accent">
-            <AlertIcon />
-            Please enter a display name
-          </Alert>
-        )}
+        <CollapsibleAlert
+          isOpen={formInvalid}
+          mt={3}
+          size="sm"
+          status="error"
+          variant="left-accent"
+        >
+          <AlertIcon />
+          Please enter a display name
+        </CollapsibleAlert>
         <Text align="left" color="gray.500" fontSize="xs" mt={4}>
           How you will appear on the scoreboard and to your friends.
         </Text>
