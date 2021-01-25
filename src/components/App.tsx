@@ -10,6 +10,7 @@ import { Main } from "./App/Main"
 import { theme } from "../theme"
 import { Header } from "./App/Header"
 import { PartyMembersProvider } from "contexts/PartyMembersContext"
+import { Errors } from "./App/Errors"
 
 export const App = () => (
   <Router>
@@ -22,6 +23,7 @@ export const App = () => (
                 <PartyMembersProvider>
                   <Header />
                   <Main />
+                  <Errors />
                 </PartyMembersProvider>
               </DisplayNameProvider>
             </QuizProvider>
