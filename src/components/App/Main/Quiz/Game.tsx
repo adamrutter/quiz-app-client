@@ -22,6 +22,7 @@ import { useAnswers } from "hooks/useAnswers"
 import { useCorrectAnswer } from "hooks/useCorrectAnswer"
 import { useQuestion } from "hooks/useQuestion"
 import { useQuestionTimeLimit } from "hooks/useQuestionTimeLimit"
+import { useRemainingAnswersAlert } from "hooks/useRemainingAnswersAlert"
 import { useTimer } from "hooks/useTimer"
 import { useUsersAnswered } from "hooks/useUsersAnswered"
 import React, { useContext, useEffect, useState } from "react"
@@ -107,7 +108,6 @@ export const Game = () => {
   const partyMembers = useContext(PartyMembers)
 
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
-  const [remainingAnswersPrompt, setRemainingAnswersPrompt] = useState(false)
 
   const currentQuestion = useQuestion()
   const currentAnswers = useAnswers()
@@ -119,6 +119,12 @@ export const Game = () => {
 
   const amountOfMembers = partyMembers.length
   const usersNotAnswered = amountOfMembers - usersAnswered?.length
+  const showRemainingAnswersAlert = useRemainingAnswersAlert(
+    usersAnswered,
+    amountOfMembers,
+    selectedAnswer,
+    timer
+  )
 
   // Handle an answer being chosen by the user
   const handleAnswer = (answerIndex: number) => {
@@ -146,7 +152,6 @@ export const Game = () => {
   useEffect(() => {
     const listener = () => {
       setSelectedAnswer(undefined)
-      setRemainingAnswersPrompt(false)
     }
 
     socket.on("finish-question", listener)
@@ -176,22 +181,11 @@ export const Game = () => {
     }
   }, [])
 
-  useEffect(() => {
-    const notAllUsersHaveAnswered = usersAnswered?.length < amountOfMembers
-    const thisUserHasAnswered = selectedAnswer !== undefined
-
-    if (notAllUsersHaveAnswered && thisUserHasAnswered) {
-      setRemainingAnswersPrompt(true)
-    } else {
-      setRemainingAnswersPrompt(false)
-    }
-  }, [usersAnswered])
-
   return (
     <>
       {currentQuestion && (
         <>
-          {remainingAnswersPrompt && (
+          {showRemainingAnswersAlert && (
             <Alert colorScheme="brand" mb={6}>
               <Spinner mr={2} size="sm" speed="1.5s" />
               Waiting for{" "}
