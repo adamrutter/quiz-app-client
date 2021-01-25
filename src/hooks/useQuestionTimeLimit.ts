@@ -12,7 +12,6 @@ export const useQuestionTimeLimit = () => {
       setTimeLimit(parseInt(time))
     }
     const finishQuestionListener = () => {
-      console.log("end of question")
       setTimeLimit(undefined)
     }
 
