@@ -14,7 +14,7 @@ export const QuizProvider = (props: Props) => {
 
   useEffect(() => {
     const quizIdListener = (id: string) => {
-      setCookie("quiz-id", id)
+      setCookie("quiz-id", id, { sameSite: "strict" })
     }
     const quizFinishedListener = () => {
       removeCookie("quiz-id")

@@ -20,11 +20,11 @@ export const PartyProvider = (props: Props) => {
 
   useEffect(() => {
     const joinedPartyListener = (id: string) => {
-      setCookie("party-id", id)
+      setCookie("party-id", id, { sameSite: "strict" })
       removeCookie("quiz-id")
     }
     const newPartyListener = (id: string) => {
-      setCookie("party-id", id)
+      setCookie("party-id", id, { sameSite: "strict" })
       removeCookie("quiz-id")
     }
     const userLeavingPartyListener = (userLeavingId: string) => {

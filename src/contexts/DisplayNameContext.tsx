@@ -14,7 +14,7 @@ export const DisplayNameProvider = (props: Props) => {
 
   useEffect(() => {
     const listener = (name: string) => {
-      setCookie("display-name", name)
+      setCookie("display-name", name, { sameSite: "strict" })
     }
 
     socket.on("display-name", listener)

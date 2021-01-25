@@ -14,7 +14,7 @@ export const UserProvider = (props: Props) => {
 
   useEffect(() => {
     const listener = (id: string) => {
-      setCookie("user-id", id)
+      setCookie("user-id", id, { sameSite: "strict" })
     }
 
     socket.on("new-user-id", listener)
