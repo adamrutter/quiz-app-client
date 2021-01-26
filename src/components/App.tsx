@@ -9,7 +9,6 @@ import React from "react"
 import { Main } from "./App/Main"
 import { theme } from "../theme"
 import { Header } from "./App/Header"
-import { PartyMembersProvider } from "contexts/PartyMembersContext"
 import { Errors } from "./App/Errors"
 
 export const App = () => (
@@ -20,11 +19,9 @@ export const App = () => (
           <PartyProvider>
             <QuizProvider>
               <DisplayNameProvider>
-                <PartyMembersProvider>
-                  <Header />
-                  <Main />
-                  <Errors />
-                </PartyMembersProvider>
+                <Header />
+                <Main />
+                <Errors />
               </DisplayNameProvider>
             </QuizProvider>
           </PartyProvider>

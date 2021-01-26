@@ -11,7 +11,6 @@ import {
   useToast
 } from "@chakra-ui/react"
 import { Party } from "contexts/PartyContext"
-import { PartyMembers } from "contexts/PartyMembersContext"
 import { Question, User as UserType } from "types"
 import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
@@ -20,6 +19,7 @@ import { UserAnsweredNotification } from "./Game/UserAnsweredNotification"
 import { useAmountOfQuestions } from "hooks/useAmountOfQuestions"
 import { useAnswers } from "hooks/useAnswers"
 import { useCorrectAnswer } from "hooks/useCorrectAnswer"
+import { usePartyMembers } from "hooks/usePartyMembers"
 import { useQuestion } from "hooks/useQuestion"
 import { useQuestionTimeLimit } from "hooks/useQuestionTimeLimit"
 import { useRemainingAnswersAlert } from "hooks/useRemainingAnswersAlert"
@@ -105,7 +105,7 @@ export const Game = () => {
   const partyId = useContext(Party)
   const userId = useContext(User)
   const quizId = useContext(Quiz)
-  const partyMembers = useContext(PartyMembers)
+  const partyMembers = usePartyMembers()
 
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
 

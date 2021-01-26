@@ -10,9 +10,9 @@ import { FaUserAlt, FaUserTimes } from "react-icons/fa"
 import { IoMdExit } from "react-icons/io"
 import { LeavePartyButton } from "./PartyMembers/LeavePartyButton"
 import { Party } from "contexts/PartyContext"
-import { PartyMembers as PartyMembersContext } from "contexts/PartyMembersContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { usePartyLeader } from "hooks/usePartyLeader"
+import { usePartyMembers } from "hooks/usePartyMembers"
 import { User } from "contexts/UserContext"
 import { UsernameItem } from "../shared/UsernameItem"
 import React, { useContext } from "react"
@@ -21,7 +21,7 @@ export const PartyMembers = () => {
   const socket = useContext(SocketIO)
   const userId = useContext(User)
   const partyId = useContext(Party)
-  const partyMembers = useContext(PartyMembersContext)
+  const partyMembers = usePartyMembers()
   const partyLeader = usePartyLeader()
 
   const kickMember = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

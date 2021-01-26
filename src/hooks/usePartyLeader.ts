@@ -1,8 +1,7 @@
-import { PartyMembers } from "contexts/PartyMembersContext"
-import { useContext } from "react"
+import { usePartyMembers } from "./usePartyMembers"
 
 export const usePartyLeader = () => {
-  const partyMembers = useContext(PartyMembers)
+  const partyMembers = usePartyMembers()
   const partyLeader = partyMembers.find(member => member.leader === true)
 
   return partyLeader
