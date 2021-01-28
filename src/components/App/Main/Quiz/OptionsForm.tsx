@@ -1,9 +1,6 @@
 import {
-  Box,
   Button,
   FormControl,
-  FormLabel as ChakraFormLabel,
-  FormLabelProps,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -11,10 +8,10 @@ import {
   NumberInputStepper,
   Select,
   SimpleGrid,
-  SimpleGridProps,
   useRadioGroup
 } from "@chakra-ui/react"
 import { BrandIcon } from "../../shared/BrandIcon"
+import { FormLabel, FormLine } from "./OptionsForm/Form"
 import { OptionsRadioCard } from "./OptionsForm/OptionsRadioCard"
 import { OpenTriviaDBOptions } from "types"
 import { Party } from "contexts/PartyContext"
@@ -24,24 +21,6 @@ import { SocketIO } from "contexts/SocketIOContext"
 import { useApiOptions } from "hooks/useApiOptions"
 import { useOpenTriviaCategories } from "hooks/useOpenTriviaCategories"
 import React, { ReactText, useContext, useEffect, useState } from "react"
-
-const FormLabel = ({ children, ...rest }: FormLabelProps) => {
-  return (
-    <ChakraFormLabel color="gray.500" fontWeight="bold" fontSize="sm" {...rest}>
-      {children}
-    </ChakraFormLabel>
-  )
-}
-
-const FormLine = ({ children, ...rest }: SimpleGridProps) => {
-  return (
-    <SimpleGrid my={5} spacing={5} {...rest}>
-      {React.Children.map(children, child => (
-        <Box>{child}</Box>
-      ))}
-    </SimpleGrid>
-  )
-}
 
 /**
  * Emit the form data to socket.io server. The provided options will be used to
