@@ -17,7 +17,7 @@ const getCategories = async () => {
 }
 
 export const useOpenTriviaCategories = () => {
-  const [categories, setCategories] = useState<OpenTriviaDBCategory[]>()
+  const [categories, setCategories] = useState<OpenTriviaDBCategory[]>([])
 
   useEffect(() => {
     ;(async () => {

@@ -23,3 +23,22 @@ export interface OpenTriviaDBOptions {
   difficulty: string | undefined
   type: string | undefined
 }
+
+export interface Option {
+  api: string | undefined
+  human: string
+}
+
+export interface Options {
+  category: Option
+  difficulty: Option
+  amount: Option
+  type: Option
+}
+
+export interface OptionsVariant {
+  category: string | undefined
+  difficulty: string | undefined
+  amount: string | undefined
+  type: string | undefined
+}

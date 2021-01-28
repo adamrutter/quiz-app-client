@@ -12,15 +12,16 @@ import {
 } from "@chakra-ui/react"
 import { BrandIcon } from "../../shared/BrandIcon"
 import { FormLabel, FormLine } from "./OptionsForm/Form"
+import { useQuestionTypes } from "hooks/useQuestionTypes"
 import { OptionsRadioCard } from "./OptionsForm/OptionsRadioCard"
-import { OpenTriviaDBOptions } from "types"
+import { OpenTriviaDBCategory, Options, OptionsVariant } from "types"
+import { useOptionsVariant } from "hooks/useOptionsVariant"
 import { Party } from "contexts/PartyContext"
 import { Quiz } from "contexts/QuizContext"
 import { Socket } from "socket.io-client"
 import { SocketIO } from "contexts/SocketIOContext"
-import { useApiOptions } from "hooks/useApiOptions"
 import { useOpenTriviaCategories } from "hooks/useOpenTriviaCategories"
-import React, { ReactText, useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useReducer } from "react"
 
 /**
  * Emit the form data to socket.io server. The provided options will be used to
@@ -34,10 +35,61 @@ const submitForm = (
   e: React.FormEvent<HTMLFormElement>,
   socket: Socket,
   partyId: string,
-  options: OpenTriviaDBOptions
+  options: OptionsVariant
 ) => {
   e.preventDefault()
   socket.emit("start-quiz", { partyId, options })
+}
+
+const initialOptions = {
+  category: {
+    api: undefined,
+    human: "Random"
+  },
+  difficulty: {
+    api: undefined,
+    human: "Random"
+  },
+  amount: {
+    api: "1",
+    human: "1"
+  },
+  type: {
+    api: undefined,
+    human: "Random"
+  }
+}
+
+interface Action {
+  type: string
+  payload: {
+    api?: string | undefined
+    human: string
+  }
+}
+
+const optionsReducer = (state: Options, { type, payload }: Action): Options => {
+  switch (type) {
+    case "category":
+      return { ...state, category: { api: payload.api, human: payload.human } }
+    case "difficulty":
+      return {
+        ...state,
+        difficulty: { api: payload.api, human: payload.human }
+      }
+    case "amount":
+      return { ...state, amount: { api: payload.api, human: payload.human } }
+    case "type":
+      return { ...state, type: { api: payload.api, human: payload.human } }
+    default:
+      return state
+  }
+}
+
+// Return an id for the given category name (from Open Trivia DB)
+const categoryId = (name: string, categories: OpenTriviaDBCategory[]) => {
+  const id = categories?.find(category => category.name === name)?.id.toString()
+  return id
 }
 
 export const OptionsForm = () => {
@@ -45,31 +97,17 @@ export const OptionsForm = () => {
   const quizId = useContext(Quiz)
   const socket = useContext(SocketIO)
 
-  const [categoryFormValue, setCategoryFormValue] = useState("Random")
-  const [amountFormValue, setAmountFormValue] = useState("1")
-  const [typeFormValue, setTypeFormValue] = useState<ReactText>("Random")
-  const [difficultyFormValue, setDifficultyFormValue] = useState<ReactText>(
-    "Random"
-  )
+  const [options, dispatch] = useReducer(optionsReducer, initialOptions)
+  const apiOptions = useOptionsVariant(options, "api")
+  const humanOptions = useOptionsVariant(options, "human")
 
-  const selectCategories = useOpenTriviaCategories()
-  const apiOptions = useApiOptions(
-    categoryFormValue,
-    difficultyFormValue,
-    typeFormValue,
-    amountFormValue
-  )
+  const categories = useOpenTriviaCategories()
+  const types = useQuestionTypes()
 
   // Send human formatted options to socket.io so they can be emitted to all clients
   useEffect(() => {
-    const options = {
-      category: categoryFormValue,
-      amount: amountFormValue,
-      difficulty: difficultyFormValue,
-      type: typeFormValue
-    }
-    socket.emit("party-leader-quiz-options", options, partyId)
-  }, [categoryFormValue, amountFormValue, difficultyFormValue, typeFormValue])
+    socket.emit("party-leader-quiz-options", humanOptions, partyId)
+  }, [humanOptions])
 
   // Set up the radio button cards
   // See https://chakra-ui.com/docs/form/radio#custom-radio-buttons
@@ -78,8 +116,15 @@ export const OptionsForm = () => {
     getRadioProps: getDifficultyRadioProps
   } = useRadioGroup({
     name: "difficulty",
-    defaultValue: difficultyFormValue,
-    onChange: value => setDifficultyFormValue(value)
+    defaultValue: initialOptions.difficulty.human,
+    onChange: (value: string) =>
+      dispatch({
+        type: "difficulty",
+        payload: {
+          api: value === "Random" ? undefined : value.toLowerCase(),
+          human: value
+        }
+      })
   })
   const difficultyGroup = getDifficultyRootProps()
 
@@ -88,8 +133,12 @@ export const OptionsForm = () => {
     getRadioProps: getTypeRadioProps
   } = useRadioGroup({
     name: "category",
-    defaultValue: typeFormValue,
-    onChange: value => setTypeFormValue(value)
+    defaultValue: initialOptions.category.human,
+    onChange: (value: string) =>
+      dispatch({
+        type: "type",
+        payload: { api: types.get(value), human: value }
+      })
   })
   const typeGroup = getTypeRootProps()
 
@@ -108,12 +157,20 @@ export const OptionsForm = () => {
               <Select
                 focusBorderColor="brand.200"
                 id="category-select"
-                onChange={e => setCategoryFormValue(e.target.value)}
-                value={categoryFormValue}
+                onChange={e => {
+                  dispatch({
+                    type: "category",
+                    payload: {
+                      api: categoryId(e.target.value, categories),
+                      human: e.target.value
+                    }
+                  })
+                }}
+                value={options.category.human}
               >
                 <option value="Random">Random</option>
-                {selectCategories &&
-                  selectCategories.map((category, index) => (
+                {categories &&
+                  categories.map((category, index) => (
                     <option key={index} value={category.name}>
                       {category.name}
                     </option>
@@ -128,10 +185,16 @@ export const OptionsForm = () => {
                 max={50}
                 min={1}
                 onChange={stringValue =>
-                  setAmountFormValue(stringValue.split(".")[0])
+                  dispatch({
+                    type: "amount",
+                    payload: {
+                      api: stringValue.split(".")[0],
+                      human: stringValue.split(".")[0]
+                    }
+                  })
                 }
                 precision={0}
-                value={amountFormValue}
+                value={options.amount.human}
               >
                 <NumberInputField />
                 <NumberInputStepper>
