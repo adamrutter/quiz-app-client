@@ -129,7 +129,9 @@ export const Game = () => {
   // Handle an answer being chosen by the user
   const handleAnswer = (answerIndex: number) => {
     const isNoPreviouslySelectedAnswer = selectedAnswer === undefined
-    if (isNoPreviouslySelectedAnswer) {
+    const timerExpired = timer === 0
+
+    if (isNoPreviouslySelectedAnswer && !timerExpired) {
       setSelectedAnswer(answerIndex)
     }
   }
