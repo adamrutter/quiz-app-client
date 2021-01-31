@@ -43,7 +43,7 @@ const isButtonDisabled = (
   const answerHasBeenSelected = selectedAnswer !== undefined
   const isSelectedAnswer = index === selectedAnswer
   const isCorrectAnswer = index === correctAnswer
-  const timerExpired = timer && timer <= 0
+  const timerExpired = timer === 0
 
   if (answerHasBeenSelected) {
     if (isSelectedAnswer) {
