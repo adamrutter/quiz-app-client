@@ -9,7 +9,13 @@ import { Children } from "react"
 
 export const FormLabel = ({ children, ...rest }: FormLabelProps) => {
   return (
-    <ChakraFormLabel color="gray.500" fontWeight="bold" fontSize="sm" {...rest}>
+    <ChakraFormLabel
+      color="gray.500"
+      fontWeight="bold"
+      fontSize="sm"
+      whiteSpace="nowrap"
+      {...rest}
+    >
       {children}
     </ChakraFormLabel>
   )

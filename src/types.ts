@@ -34,6 +34,7 @@ export interface Options {
   difficulty: Option
   amount: Option
   type: Option
+  time: Option
 }
 
 export interface OptionsVariant {
@@ -41,4 +42,5 @@ export interface OptionsVariant {
   difficulty: string | undefined
   amount: string | undefined
   type: string | undefined
+  time: string | undefined
 }

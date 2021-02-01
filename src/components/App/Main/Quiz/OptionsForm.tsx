@@ -57,6 +57,10 @@ const initialOptions = {
   type: {
     api: undefined,
     human: "Random"
+  },
+  time: {
+    api: "20",
+    human: "20"
   }
 }
 
@@ -81,6 +85,8 @@ const optionsReducer = (state: Options, { type, payload }: Action): Options => {
       return { ...state, amount: { api: payload.api, human: payload.human } }
     case "type":
       return { ...state, type: { api: payload.api, human: payload.human } }
+    case "time":
+      return { ...state, time: { api: payload.api, human: payload.human } }
     default:
       return state
   }
@@ -151,7 +157,7 @@ export const OptionsForm = () => {
     */}
       {!quizId && (
         <form onSubmit={e => submitForm(e, socket, partyId, apiOptions)}>
-          <FormLine minChildWidth="175px">
+          <FormLine columns={[1, 2, 3]}>
             <FormControl width="full">
               <FormLabel>Category</FormLabel>
               <Select
@@ -195,6 +201,32 @@ export const OptionsForm = () => {
                 }
                 precision={0}
                 value={options.amount.human}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Time Limit</FormLabel>
+              <NumberInput
+                inputMode="numeric"
+                focusBorderColor="brand.200"
+                max={60}
+                min={5}
+                onChange={stringValue =>
+                  dispatch({
+                    type: "time",
+                    payload: {
+                      api: stringValue.split(".")[0],
+                      human: stringValue.split(".")[0]
+                    }
+                  })
+                }
+                precision={0}
+                value={options.time.human}
               >
                 <NumberInputField />
                 <NumberInputStepper>
