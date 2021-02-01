@@ -1,4 +1,4 @@
-import { Badge, Box, Divider, Flex, HStack, Progress } from "@chakra-ui/react"
+import { Badge, Box, Divider, Flex, Progress } from "@chakra-ui/react"
 import { Timer } from "./Timer"
 import { useIsTimeLow } from "hooks/useIsTimeLow"
 import React from "react"
@@ -18,11 +18,14 @@ export const Header = (props: Props) => {
   return (
     <>
       <Flex justifyContent="space-between">
-        <HStack spacing={2}>
-          <Box>
-            <Badge colorScheme="brand" variant="solid">
-              Question
-            </Badge>{" "}
+        <Flex
+          alignItems={["flex-start", "center"]}
+          direction={["column", "row"]}
+        >
+          <Badge colorScheme="brand" mb={[1, 0]} mr={[0, 2]} variant="solid">
+            Question
+          </Badge>{" "}
+          <Box textAlign="left">
             <Box as="span" fontWeight="bold">
               {props.currentQuestionNumber}
             </Box>
@@ -31,7 +34,7 @@ export const Header = (props: Props) => {
               of {props.amountOfQuestions}
             </Box>
           </Box>
-        </HStack>
+        </Flex>
         <Timer time={props.time} />
       </Flex>
       <Progress
