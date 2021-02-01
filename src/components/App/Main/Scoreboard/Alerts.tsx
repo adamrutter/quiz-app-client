@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, AlertTitle } from "@chakra-ui/react"
+import { Alert, AlertIcon } from "@chakra-ui/react"
 import { useIsQuizRunning } from "hooks/useIsQuizRunning"
 import React from "react"
 import { GiQueenCrown } from "react-icons/gi"
@@ -23,7 +23,6 @@ export const Alerts = ({ scores }: Props) => {
       {quizFinished && winningUsers && scores?.length !== 0 && (
         <Alert colorScheme="green" variant="left-accent">
           <AlertIcon as={GiQueenCrown} boxSize="2em" />
-          <AlertTitle>Quiz finished!</AlertTitle>
           {winningUsers && winningUsers.length === 1 ? (
             <>{joinedWinnersString} is the winner!</>
           ) : (
