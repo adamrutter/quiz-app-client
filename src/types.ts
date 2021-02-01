@@ -25,8 +25,8 @@ export interface OpenTriviaDBOptions {
 }
 
 export interface Option {
-  api: string | undefined
-  human: string
+  api: string | number | undefined
+  human: string | number
 }
 
 export interface Options {
@@ -38,9 +38,9 @@ export interface Options {
 }
 
 export interface OptionsVariant {
-  category: string | undefined
-  difficulty: string | undefined
-  amount: string | undefined
-  type: string | undefined
-  time: string | undefined
+  category: string | number | undefined
+  difficulty: string | number | undefined
+  amount: string | number | undefined
+  type: string | number | undefined
+  time: string | number | undefined
 }

@@ -51,24 +51,24 @@ const initialOptions = {
     human: "Random"
   },
   amount: {
-    api: "1",
-    human: "1"
+    api: 1,
+    human: 1
   },
   type: {
     api: undefined,
     human: "Random"
   },
   time: {
-    api: "20",
-    human: "20"
+    api: 20,
+    human: 20
   }
 }
 
 interface Action {
   type: string
   payload: {
-    api?: string | undefined
-    human: string
+    api?: string | number | undefined
+    human: string | number
   }
 }
 
@@ -94,7 +94,7 @@ const optionsReducer = (state: Options, { type, payload }: Action): Options => {
 
 // Return an id for the given category name (from Open Trivia DB)
 const categoryId = (name: string, categories: OpenTriviaDBCategory[]) => {
-  const id = categories?.find(category => category.name === name)?.id.toString()
+  const id = categories?.find(category => category.name === name)?.id
   return id
 }
 
@@ -190,12 +190,12 @@ export const OptionsForm = () => {
                 focusBorderColor="brand.200"
                 max={50}
                 min={1}
-                onChange={stringValue =>
+                onChange={value =>
                   dispatch({
                     type: "amount",
                     payload: {
-                      api: stringValue.split(".")[0],
-                      human: stringValue.split(".")[0]
+                      api: parseInt(value.split(".")[0]),
+                      human: parseInt(value.split(".")[0])
                     }
                   })
                 }
@@ -216,12 +216,12 @@ export const OptionsForm = () => {
                 focusBorderColor="brand.200"
                 max={60}
                 min={5}
-                onChange={stringValue =>
+                onChange={value =>
                   dispatch({
                     type: "time",
                     payload: {
-                      api: stringValue.split(".")[0],
-                      human: stringValue.split(".")[0]
+                      api: parseInt(value.split(".")[0]),
+                      human: parseInt(value.split(".")[0])
                     }
                   })
                 }
