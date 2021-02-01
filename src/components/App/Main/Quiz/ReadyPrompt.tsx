@@ -81,7 +81,7 @@ export const ReadyPrompt = (props: Props) => {
       <ModalOverlay />
       <ModalContent borderTopColor="brand.400" borderTopWidth={7} mx={2}>
         <ModalBody>
-          <Flex alignItems="center" direction="column" px={5} py={9}>
+          <Flex alignItems="center" direction="column" px={0} py={9}>
             {usersReady.length === 0 ? (
               <>
                 <Text textAlign="center">
@@ -93,7 +93,13 @@ export const ReadyPrompt = (props: Props) => {
                   </Text>
                   ...
                 </Text>
-                <Text fontSize="3xl" fontWeight="bold" mb={4} mt={3}>
+                <Text
+                  fontSize="3xl"
+                  fontWeight="bold"
+                  mb={4}
+                  mt={3}
+                  textAlign="center"
+                >
                   Are you ready?
                 </Text>
                 <Button
