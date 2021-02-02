@@ -5,7 +5,7 @@ import { User } from "types"
 export const useRemainingAnswersAlert = (
   usersAnswered: User[],
   amountOfMembers: number,
-  selectedAnswer: number | undefined,
+  userId: string,
   time: number | undefined
 ) => {
   const socket = useContext(SocketIO)
@@ -15,7 +15,8 @@ export const useRemainingAnswersAlert = (
     // Open/close alert on number of users answered/whether this user has
     // answered
     const notAllUsersHaveAnswered = usersAnswered?.length < amountOfMembers
-    const thisUserHasAnswered = selectedAnswer !== undefined
+    const thisUserHasAnswered =
+      usersAnswered.find(user => user.id === userId) !== undefined
 
     if (notAllUsersHaveAnswered && thisUserHasAnswered) {
       setShowAlert(true)
@@ -33,7 +34,7 @@ export const useRemainingAnswersAlert = (
     return () => {
       socket.off("finish-question", endOfQuestion)
     }
-  }, [usersAnswered, time, amountOfMembers, selectedAnswer, socket])
+  }, [usersAnswered, time, amountOfMembers, userId, socket])
 
   return showAlert
 }

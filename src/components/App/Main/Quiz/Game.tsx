@@ -122,7 +122,7 @@ export const Game = () => {
   const showRemainingAnswersAlert = useRemainingAnswersAlert(
     usersAnswered,
     amountOfMembers,
-    selectedAnswer,
+    userId,
     timer
   )
 
@@ -195,18 +195,20 @@ export const Game = () => {
     <>
       {currentQuestion && (
         <>
-          <CollapsibleAlert
-            colorScheme="brand"
-            isOpen={showRemainingAnswersAlert}
-            mb={6}
-          >
-            <Spinner mr={2} size="sm" speed="1.5s" />
-            Waiting for{" "}
-            {usersNotAnswered === 1
-              ? "1 more person"
-              : `${usersNotAnswered} more people`}{" "}
-            to answer...
-          </CollapsibleAlert>
+          {partyMembers?.length > 1 && (
+            <CollapsibleAlert
+              colorScheme="brand"
+              isOpen={showRemainingAnswersAlert}
+              mb={6}
+            >
+              <Spinner mr={2} size="sm" speed="1.5s" />
+              Waiting for{" "}
+              {usersNotAnswered === 1
+                ? "1 more person"
+                : `${usersNotAnswered} more people`}{" "}
+              to answer...
+            </CollapsibleAlert>
+          )}
           <Header
             amountOfQuestions={amountOfQuestions}
             currentQuestionNumber={currentQuestion.number}
