@@ -23,7 +23,7 @@ export const usePartyMembers = () => {
     return () => {
       socket.off("party-members", partyMembersListener)
     }
-  }, [])
+  }, [socket])
 
   return members
 }
