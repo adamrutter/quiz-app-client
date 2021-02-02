@@ -1,12 +1,10 @@
 import { Box, Button, Wrap, WrapItem } from "@chakra-ui/react"
 import { SocketIO } from "contexts/SocketIOContext"
-import { useCookies } from "react-cookie"
 import React, { useContext } from "react"
 import { User } from "contexts/UserContext"
 import { Party } from "contexts/PartyContext"
 
 export const CreateNewParty = () => {
-  const [, , removeCookie] = useCookies()
   const socket = useContext(SocketIO)
   const userId = useContext(User)
   const partyId = useContext(Party)
@@ -15,12 +13,7 @@ export const CreateNewParty = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault()
-
     socket.emit("kick-party-member", userId, partyId)
-    removeCookie("display-name")
-    removeCookie("user-id")
-    removeCookie("party-id")
-    removeCookie("quiz-id")
   }
 
   return (
