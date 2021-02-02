@@ -52,7 +52,7 @@ export const PartyProvider = (props: Props) => {
       socket.off("new-party-id", newPartyListener)
       socket.off("user-leaving-party", userLeavingPartyListener)
     }
-  }, [cookies])
+  }, [cookies, removeCookie, requestedParty, setCookie, socket, userId])
 
   return (
     <Party.Provider value={cookies["party-id"]}>
