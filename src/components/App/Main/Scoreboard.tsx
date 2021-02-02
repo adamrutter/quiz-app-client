@@ -1,7 +1,4 @@
 import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
   Badge,
   Box,
   Flex,
@@ -11,9 +8,7 @@ import {
   useColorModeValue
 } from "@chakra-ui/react"
 import { FaUserAlt } from "react-icons/fa"
-import { GiQueenCrown } from "react-icons/gi"
 import { UsernameItem } from "./shared/UsernameItem"
-import { MdGrade } from "react-icons/md"
 import React from "react"
 import { Alerts } from "./Scoreboard/Alerts"
 import { useScores } from "hooks/useScores"
