@@ -148,7 +148,15 @@ export const Game = () => {
         quizId
       )
     }
-  }, [selectedAnswer])
+  }, [
+    currentAnswers,
+    currentQuestion?.number,
+    partyId,
+    quizId,
+    selectedAnswer,
+    socket,
+    userId
+  ])
 
   // Handle the end of the current question
   useEffect(() => {
@@ -181,7 +189,7 @@ export const Game = () => {
     return () => {
       socket.off("user-answered", listener)
     }
-  }, [])
+  }, [socket, toast, userId])
 
   return (
     <>
