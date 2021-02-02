@@ -33,7 +33,7 @@ export const useRemainingAnswersAlert = (
     return () => {
       socket.off("finish-question", endOfQuestion)
     }
-  }, [usersAnswered, time])
+  }, [usersAnswered, time, amountOfMembers, selectedAnswer, socket])
 
   return showAlert
 }
