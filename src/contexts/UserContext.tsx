@@ -22,7 +22,7 @@ export const UserProvider = (props: Props) => {
     return () => {
       socket.off("new-user-id", listener)
     }
-  }, [cookies])
+  }, [cookies, setCookie, socket])
 
   if (!cookies["user-id"]) {
     socket.emit("request-user-id")
