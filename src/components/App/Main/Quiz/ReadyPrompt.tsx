@@ -46,7 +46,6 @@ export const ReadyPrompt = (props: Props) => {
   const chosenOptions = useChosenOptions()
 
   const randomCategory = chosenOptions?.category === "Random"
-  const randomDifficulty = chosenOptions?.difficulty === "Random"
 
   // Handle user ready, waiting for other users to be ready
   useEffect(() => {
