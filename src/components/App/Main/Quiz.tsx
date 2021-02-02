@@ -33,7 +33,7 @@ export const Quiz = () => {
       socket.off("ready-prompt", readyPromptListener)
       socket.off("all-users-ready", allUsersReadyListener)
     }
-  }, [])
+  }, [socket])
 
   return (
     <>
