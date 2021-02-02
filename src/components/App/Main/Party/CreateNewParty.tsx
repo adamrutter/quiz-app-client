@@ -6,7 +6,7 @@ import { User } from "contexts/UserContext"
 import { Party } from "contexts/PartyContext"
 
 export const CreateNewParty = () => {
-  const [cookies, setCookie, removeCookie] = useCookies()
+  const [, , removeCookie] = useCookies()
   const socket = useContext(SocketIO)
   const userId = useContext(User)
   const partyId = useContext(Party)
