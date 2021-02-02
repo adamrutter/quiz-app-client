@@ -1,12 +1,14 @@
 import { Box, Progress, Text } from "@chakra-ui/react"
 import { default as indefiniteArticle } from "indefinite"
 import { PanaHavingFun } from "svg/PanaHavingFun"
+import { Party } from "contexts/PartyContext"
 import { useChosenOptions } from "hooks/useChosenOptions"
 import { usePartyLeader } from "hooks/usePartyLeader"
-import React from "react"
+import React, { useContext } from "react"
 
 export const WaitForStart = () => {
-  const partyLeader = usePartyLeader()
+  const partyId = useContext(Party)
+  const partyLeader = usePartyLeader(partyId)
 
   const chosenOptions = useChosenOptions()
 

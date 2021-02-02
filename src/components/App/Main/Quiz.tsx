@@ -1,6 +1,7 @@
 import { Alert, AlertIcon, Box, Spinner } from "@chakra-ui/react"
 import { Game } from "./Quiz/Game"
 import { OptionsForm } from "./Quiz/OptionsForm"
+import { Party } from "contexts/PartyContext"
 import { Quiz as QuizId } from "contexts/QuizContext"
 import { ReadyPrompt } from "./Quiz/ReadyPrompt"
 import { SocketIO } from "contexts/SocketIOContext"
@@ -14,8 +15,9 @@ export const Quiz = () => {
   const socket = useContext(SocketIO)
   const quizId = useContext(QuizId)
   const userId = useContext(User)
-  const partyMembers = usePartyMembers()
-  const partyLeader = usePartyLeader()
+  const partyId = useContext(Party)
+  const partyMembers = usePartyMembers(partyId)
+  const partyLeader = usePartyLeader(partyId)
 
   const [readyPromptOpen, setReadyPromptOpen] = useState(false)
 

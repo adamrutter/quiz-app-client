@@ -105,7 +105,7 @@ export const Game = () => {
   const partyId = useContext(Party)
   const userId = useContext(User)
   const quizId = useContext(Quiz)
-  const partyMembers = usePartyMembers()
+  const partyMembers = usePartyMembers(partyId)
 
   const [selectedAnswer, setSelectedAnswer] = useState<number | undefined>()
 

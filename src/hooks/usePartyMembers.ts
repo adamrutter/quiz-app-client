@@ -7,12 +7,12 @@ export interface User {
   leader: boolean
 }
 
-export const usePartyMembers = () => {
+export const usePartyMembers = (partyId: string) => {
   const socket = useContext(SocketIO)
   const [members, setMembers] = useState<User[]>([])
 
   useEffect(() => {
-    socket.emit("request-party-members")
+    socket.emit("request-party-members", partyId)
 
     const partyMembersListener = (users: User[]) => {
       setMembers(users)
@@ -23,7 +23,7 @@ export const usePartyMembers = () => {
     return () => {
       socket.off("party-members", partyMembersListener)
     }
-  }, [socket])
+  }, [partyId, socket])
 
   return members
 }

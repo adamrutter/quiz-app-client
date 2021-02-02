@@ -21,8 +21,8 @@ export const PartyMembers = () => {
   const socket = useContext(SocketIO)
   const userId = useContext(User)
   const partyId = useContext(Party)
-  const partyMembers = usePartyMembers()
-  const partyLeader = usePartyLeader()
+  const partyMembers = usePartyMembers(partyId)
+  const partyLeader = usePartyLeader(partyId)
 
   const kickMember = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     socket.emit(
