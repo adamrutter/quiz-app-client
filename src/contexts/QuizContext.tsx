@@ -27,7 +27,7 @@ export const QuizProvider = (props: Props) => {
       socket.off("new-quiz-id", quizIdListener)
       socket.off("quiz-finished", quizFinishedListener)
     }
-  }, [cookies])
+  }, [cookies, removeCookie, setCookie, socket])
 
   return (
     <Quiz.Provider value={cookies["quiz-id"]}>{props.children}</Quiz.Provider>
