@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   FormControl,
   NumberDecrementStepper,
@@ -8,7 +9,8 @@ import {
   NumberInputStepper,
   Select,
   SimpleGrid,
-  useRadioGroup
+  useRadioGroup,
+  useTheme
 } from "@chakra-ui/react"
 import { BrandIcon } from "../../shared/BrandIcon"
 import { FormLabel, FormLine } from "./OptionsForm/Form"
@@ -109,6 +111,8 @@ export const OptionsForm = () => {
 
   const categories = useOpenTriviaCategories()
   const types = useQuestionTypes()
+
+  const theme = useTheme()
 
   // Send human formatted options to socket.io so they can be emitted to all clients
   useEffect(() => {
@@ -230,6 +234,16 @@ export const OptionsForm = () => {
               >
                 <NumberInputField />
                 <NumberInputStepper>
+                  <Box
+                    color="gray.500"
+                    fontSize="sm"
+                    position="absolute"
+                    right={`calc(100% + ${theme.space[2]})`}
+                    top="50%"
+                    transform="translateY(-50%)"
+                  >
+                    seconds
+                  </Box>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
                 </NumberInputStepper>
