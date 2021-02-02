@@ -22,7 +22,7 @@ export const DisplayNameProvider = (props: Props) => {
     return () => {
       socket.off("display-name", listener)
     }
-  }, [cookies])
+  }, [cookies, setCookie, socket])
 
   return (
     <DisplayName.Provider value={cookies["display-name"]}>
