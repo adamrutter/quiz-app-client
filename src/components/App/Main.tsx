@@ -51,7 +51,7 @@ export const Main = () => {
       socket.off("new-question", newQuestion)
       socket.off("begin-post-question", postQuestionListener)
     }
-  }, [])
+  }, [socket])
 
   const handleTabClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
