@@ -55,7 +55,7 @@ export const ReadyPrompt = (props: Props) => {
     return () => {
       socket.off("these-users-ready", listener)
     }
-  }, [])
+  }, [socket])
 
   useEffect(() => {
     const listener = (percent: number) => setPercentUsersReady(percent)
@@ -63,7 +63,7 @@ export const ReadyPrompt = (props: Props) => {
     return () => {
       socket.off("percent-users-ready", listener)
     }
-  }, [])
+  }, [socket])
 
   useEffect(() => {
     const listener = (percent: number) => {
@@ -74,7 +74,7 @@ export const ReadyPrompt = (props: Props) => {
     return () => {
       socket.off("all-users-ready", listener)
     }
-  }, [])
+  }, [socket])
 
   return (
     <Modal isOpen={props.isOpen} onClose={onClose} size="xl">
