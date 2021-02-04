@@ -34,6 +34,7 @@ export const InviteFriends = () => {
         borderColor={linkContainerBorderColor}
         borderRadius="md"
         colorScheme="gray"
+        justifyContent="space-between"
         my={3}
         p={1}
         pl={3}
@@ -41,7 +42,7 @@ export const InviteFriends = () => {
         <Code
           bg="none"
           flexShrink={2}
-          overflowX="scroll"
+          overflowX="auto"
           p={0}
           whiteSpace="nowrap"
         >
