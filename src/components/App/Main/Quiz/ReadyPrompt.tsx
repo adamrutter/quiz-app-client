@@ -112,7 +112,9 @@ export const ReadyPrompt = (props: Props) => {
               </>
             ) : (
               <>
-                <Text fontSize="xl">Waiting for other users...</Text>
+                <Text fontSize="xl" textAlign="center">
+                  Waiting for other users...
+                </Text>
                 <Progress
                   colorScheme="brand"
                   hasStripe
