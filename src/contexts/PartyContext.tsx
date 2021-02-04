@@ -36,7 +36,14 @@ export const PartyProvider = (props: Props) => {
     }
 
     if (requestedParty) {
-      socket.emit("join-party", requestedParty, userId)
+      socket.emit("does-party-exist", requestedParty)
+      socket.once("party-exists", (exists: boolean) => {
+        if (exists) {
+          socket.emit("join-party", requestedParty, userId)
+        } else {
+          socket.emit("request-new-party")
+        }
+      })
     } else if (cookies["party-id"]) {
       socket.emit("join-party", cookies["party-id"], userId)
     } else {
