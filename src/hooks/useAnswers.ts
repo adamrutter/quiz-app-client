@@ -20,7 +20,7 @@ export const useAnswers = () => {
 
     return () => {
       socket.off("new-question", answersListener)
-      socket.on("finish-question", finishQuestionListener)
+      socket.off("finish-question", finishQuestionListener)
     }
   }, [socket])
 
