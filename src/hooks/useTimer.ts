@@ -23,7 +23,7 @@ export const useTimer = (questionNumber: string | undefined) => {
 
     return () => {
       socket.off(timerEvent, listener)
-      socket.on("finish-question", finishQuestionListener)
+      socket.off("finish-question", finishQuestionListener)
     }
   }, [questionNumber, socket, timerEvent])
 
