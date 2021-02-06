@@ -1,6 +1,11 @@
-import { useCookies } from "react-cookie"
 import { SocketIO } from "./SocketIOContext"
-import React, { createContext, ReactNode, useContext, useEffect } from "react"
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from "react"
 
 interface Props {
   children?: ReactNode
@@ -9,26 +14,20 @@ interface Props {
 export const User = createContext("")
 
 export const UserProvider = (props: Props) => {
-  const [cookies, setCookie] = useCookies(["user-id"])
   const socket = useContext(SocketIO)
+  const [userId, setUserId] = useState("")
 
   useEffect(() => {
-    const listener = (id: string) => {
-      setCookie("user-id", id, { sameSite: "strict" })
-    }
-
+    const listener = (id: string) => setUserId(id)
     socket.on("new-user-id", listener)
-
     return () => {
       socket.off("new-user-id", listener)
     }
-  }, [cookies, setCookie, socket])
+  }, [socket])
 
-  if (!cookies["user-id"]) {
+  if (!userId) {
     socket.emit("request-user-id")
   }
 
-  return (
-    <User.Provider value={cookies["user-id"]}>{props.children}</User.Provider>
-  )
+  return <User.Provider value={userId}>{props.children}</User.Provider>
 }
