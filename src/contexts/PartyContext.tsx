@@ -50,13 +50,13 @@ export const PartyProvider = (props: Props) => {
   }, [socket, userId])
 
   useEffect(() => {
-    if (requestedParty) {
+    if (requestedParty && userId) {
       socket.emit("does-party-exist", requestedParty)
       socket.once("party-exists", (exists: boolean) => {
         if (exists) {
           socket.emit("join-party", requestedParty, userId)
         } else {
-          socket.emit("request-new-party")
+          socket.emit("request-new-party", userId)
         }
       })
     } else if (!partyId && userId.length > 0) {
@@ -68,7 +68,7 @@ export const PartyProvider = (props: Props) => {
 
   return (
     <Party.Provider value={partyId}>
-      {requestedParty && <Redirect to="/" />}
+      {requestedParty && userId && <Redirect to="/" />}
       {props.children}
     </Party.Provider>
   )
