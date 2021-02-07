@@ -66,6 +66,10 @@ export const PartyProvider = (props: Props) => {
     return () => {}
   }, [partyId, requestedParty, socket, userId])
 
+  useEffect(() => {
+    window.onunload = () => socket.emit("kick-party-member", userId, partyId)
+  })
+
   return (
     <Party.Provider value={partyId}>
       {requestedParty && userId && <Redirect to="/" />}
