@@ -1,6 +1,11 @@
-import { useCookies } from "react-cookie"
 import { SocketIO } from "./SocketIOContext"
-import React, { createContext, ReactNode, useContext, useEffect } from "react"
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from "react"
 
 interface Props {
   children?: ReactNode
@@ -9,27 +14,24 @@ interface Props {
 export const Quiz = createContext<string | undefined>("")
 
 export const QuizProvider = (props: Props) => {
-  const [cookies, setCookie, removeCookie] = useCookies(["quiz-id"])
   const socket = useContext(SocketIO)
+  const [quizId, setQuizId] = useState("")
 
   useEffect(() => {
-    const quizIdListener = (id: string) => {
-      setCookie("quiz-id", id, { sameSite: "strict" })
-    }
-    const quizFinishedListener = () => {
-      removeCookie("quiz-id")
-    }
-
+    const quizIdListener = (id: string) => setQuizId(id)
     socket.on("new-quiz-id", quizIdListener)
-    socket.on("quiz-finished", quizFinishedListener)
-
     return () => {
       socket.off("new-quiz-id", quizIdListener)
+    }
+  }, [socket])
+
+  useEffect(() => {
+    const quizFinishedListener = () => setQuizId("")
+    socket.on("quiz-finished", quizFinishedListener)
+    return () => {
       socket.off("quiz-finished", quizFinishedListener)
     }
-  }, [cookies, removeCookie, setCookie, socket])
+  }, [socket])
 
-  return (
-    <Quiz.Provider value={cookies["quiz-id"]}>{props.children}</Quiz.Provider>
-  )
+  return <Quiz.Provider value={quizId}>{props.children}</Quiz.Provider>
 }
