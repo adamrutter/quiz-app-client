@@ -1,9 +1,14 @@
-import { useCookies } from "react-cookie"
 import { Redirect } from "react-router-dom"
 import { SocketIO } from "../contexts/SocketIOContext"
 import { User } from "./UserContext"
 import queryString from "query-string"
-import React, { createContext, ReactNode, useContext, useEffect } from "react"
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from "react"
 
 interface Props {
   children?: ReactNode
@@ -12,29 +17,39 @@ interface Props {
 export const Party = createContext("")
 
 export const PartyProvider = (props: Props) => {
-  const [cookies, setCookie, removeCookie] = useCookies(["party-id"])
   const userId = useContext(User)
   const socket = useContext(SocketIO)
+  const [partyId, setPartyId] = useState("")
 
   const { join: requestedParty } = queryString.parse(window.location.search)
 
   useEffect(() => {
-    const joinedPartyListener = (id: string) => {
-      setCookie("party-id", id, { sameSite: "strict" })
-      removeCookie("quiz-id")
+    const listener = (id: string) => setPartyId(id)
+    socket.on("joined-party-id", listener)
+    return () => {
+      socket.off("joined-party-id", listener)
     }
-    const newPartyListener = (id: string) => {
-      setCookie("party-id", id, { sameSite: "strict" })
-      removeCookie("quiz-id")
-    }
-    const userLeavingPartyListener = (userLeavingId: string) => {
-      if (userId === userLeavingId) {
-        removeCookie("party-id")
-        removeCookie("quiz-id")
-        window.location.reload()
-      }
-    }
+  }, [socket])
 
+  useEffect(() => {
+    const listener = (id: string) => setPartyId(id)
+    socket.on("new-party-id", listener)
+    return () => {
+      socket.off("new-party-id", listener)
+    }
+  }, [socket])
+
+  useEffect(() => {
+    const listener = (userLeavingId: string) => {
+      if (userId === userLeavingId) window.location.reload()
+    }
+    socket.on("user-leaving-party", listener)
+    return () => {
+      socket.off("user-leaving-party", listener)
+    }
+  }, [socket, userId])
+
+  useEffect(() => {
     if (requestedParty) {
       socket.emit("does-party-exist", requestedParty)
       socket.once("party-exists", (exists: boolean) => {
@@ -44,25 +59,15 @@ export const PartyProvider = (props: Props) => {
           socket.emit("request-new-party")
         }
       })
-    } else if (cookies["party-id"]) {
-      socket.emit("join-party", cookies["party-id"], userId)
-    } else {
-      socket.emit("request-new-party")
+    } else if (!partyId && userId.length > 0) {
+      socket.emit("request-new-party", userId)
     }
 
-    socket.on("joined-party-id", joinedPartyListener)
-    socket.on("new-party-id", newPartyListener)
-    socket.on("user-leaving-party", userLeavingPartyListener)
-
-    return () => {
-      socket.off("joined-party-id", joinedPartyListener)
-      socket.off("new-party-id", newPartyListener)
-      socket.off("user-leaving-party", userLeavingPartyListener)
-    }
-  }, [cookies, removeCookie, requestedParty, setCookie, socket, userId])
+    return () => {}
+  }, [partyId, requestedParty, socket, userId])
 
   return (
-    <Party.Provider value={cookies["party-id"]}>
+    <Party.Provider value={partyId}>
       {requestedParty && <Redirect to="/" />}
       {props.children}
     </Party.Provider>
