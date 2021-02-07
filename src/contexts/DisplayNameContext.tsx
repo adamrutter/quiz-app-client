@@ -1,6 +1,11 @@
-import { useCookies } from "react-cookie"
 import { SocketIO } from "./SocketIOContext"
-import React, { createContext, ReactNode, useContext, useEffect } from "react"
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from "react"
 
 interface Props {
   children?: ReactNode
@@ -9,23 +14,19 @@ interface Props {
 export const DisplayName = createContext("")
 
 export const DisplayNameProvider = (props: Props) => {
-  const [cookies, setCookie] = useCookies(["display-name"])
   const socket = useContext(SocketIO)
+  const [displayName, setDisplayName] = useState("")
 
   useEffect(() => {
-    const listener = (name: string) => {
-      setCookie("display-name", name, { sameSite: "strict" })
-    }
-
+    const listener = (name: string) => setDisplayName(name)
     socket.on("display-name", listener)
-
     return () => {
       socket.off("display-name", listener)
     }
-  }, [cookies, setCookie, socket])
+  }, [socket])
 
   return (
-    <DisplayName.Provider value={cookies["display-name"]}>
+    <DisplayName.Provider value={displayName}>
       {props.children}
     </DisplayName.Provider>
   )
