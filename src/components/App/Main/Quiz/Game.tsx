@@ -193,7 +193,7 @@ export const Game = () => {
 
   return (
     <>
-      {currentQuestion && (
+      {currentQuestion && amountOfQuestions && (
         <>
           {partyMembers?.length > 1 && (
             <CollapsibleAlert
