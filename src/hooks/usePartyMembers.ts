@@ -12,12 +12,11 @@ export const usePartyMembers = (partyId: string) => {
   const [members, setMembers] = useState<User[]>([])
 
   useEffect(() => {
-    socket.emit("request-party-members", partyId)
-
-    const partyMembersListener = (users: User[]) => {
-      setMembers(users)
+    if (partyId) {
+      socket.emit("request-party-members", partyId)
     }
 
+    const partyMembersListener = (users: User[]) => setMembers(users)
     socket.on("party-members", partyMembersListener)
 
     return () => {
