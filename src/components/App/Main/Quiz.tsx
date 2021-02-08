@@ -5,6 +5,7 @@ import { Party } from "contexts/PartyContext"
 import { Quiz as QuizId } from "contexts/QuizContext"
 import { ReadyPrompt } from "./Quiz/ReadyPrompt"
 import { SocketIO } from "contexts/SocketIOContext"
+import { useLoadingState } from "hooks/useLoadingState"
 import { usePartyLeader } from "hooks/usePartyLeader"
 import { usePartyMembers } from "hooks/usePartyMembers"
 import { User } from "contexts/UserContext"
@@ -18,10 +19,11 @@ export const Quiz = () => {
   const partyId = useContext(Party)
   const partyMembers = usePartyMembers(partyId)
   const partyLeader = usePartyLeader(partyMembers)
+  const isLoading = useLoadingState()
+
+  const userIsPartyLeader = userId === partyLeader?.id
 
   const [readyPromptOpen, setReadyPromptOpen] = useState(false)
-
-  const isLoading = partyMembers.length === 0
 
   // Whether to show the pre-quiz ready prompt
   useEffect(() => {
@@ -45,24 +47,8 @@ export const Quiz = () => {
           Loading... <Spinner ml={2} size="sm" speed="1s" />
         </Box>
       )}
-      {!isLoading && partyLeader && userId === partyLeader?.id && (
-        <OptionsForm />
-      )}
-      {!isLoading && partyLeader && userId !== partyLeader?.id && !quizId && (
-        <WaitForStart />
-      )}
-      {!isLoading && !partyLeader && (
-        <Alert
-          mb={6}
-          mt={3}
-          status="error"
-          textAlign="left"
-          variant="left-accent"
-        >
-          <AlertIcon />
-          There is no party leader. Please either create or join another party.
-        </Alert>
-      )}
+      {!isLoading && userIsPartyLeader && <OptionsForm />}
+      {!isLoading && !userIsPartyLeader && !quizId && <WaitForStart />}
       {quizId && <Game />}
     </>
   )
