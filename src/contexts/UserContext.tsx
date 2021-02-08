@@ -18,16 +18,12 @@ export const UserProvider = (props: Props) => {
   const [userId, setUserId] = useState("")
 
   useEffect(() => {
-    if (!userId) {
-      socket.emit("request-user-id")
-    }
-
     const listener = (id: string) => setUserId(id)
     socket.on("new-user-id", listener)
     return () => {
       socket.off("new-user-id", listener)
     }
-  }, [socket, userId])
+  }, [socket])
 
   return <User.Provider value={userId}>{props.children}</User.Provider>
 }
