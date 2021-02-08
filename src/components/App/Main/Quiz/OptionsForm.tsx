@@ -16,7 +16,7 @@ import { BrandIcon } from "../../shared/BrandIcon"
 import { FormLabel, FormLine } from "./OptionsForm/Form"
 import { useQuestionTypes } from "hooks/useQuestionTypes"
 import { OptionsRadioCard } from "./OptionsForm/OptionsRadioCard"
-import { OpenTriviaDBCategory, Options, OptionsVariant } from "types"
+import { OpenTriviaDBCategory, Option, Options, OptionsVariant } from "types"
 import { useOptionsVariant } from "hooks/useOptionsVariant"
 import { Party } from "contexts/PartyContext"
 import { Quiz } from "contexts/QuizContext"
@@ -68,10 +68,7 @@ const initialOptions = {
 
 interface Action {
   type: string
-  payload: {
-    api?: string | number | undefined
-    human: string | number | undefined
-  }
+  payload: Option
 }
 
 const optionsReducer = (state: Options, { type, payload }: Action): Options => {
