@@ -48,7 +48,9 @@ export const Quiz = () => {
         </Box>
       )}
       {!isLoading && userIsPartyLeader && <OptionsForm />}
-      {!isLoading && !userIsPartyLeader && !quizId && <WaitForStart />}
+      {!isLoading && !userIsPartyLeader && !quizId && (
+        <WaitForStart partyLeader={partyLeader} />
+      )}
       {quizId && <Game />}
     </>
   )
