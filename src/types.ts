@@ -10,6 +10,7 @@ export interface Question {
 export interface User {
   id: string
   name: string
+  leader?: boolean
 }
 
 export interface OpenTriviaDBCategory {

@@ -22,7 +22,7 @@ export const PartyMembers = () => {
   const userId = useContext(User)
   const partyId = useContext(Party)
   const partyMembers = usePartyMembers(partyId)
-  const partyLeader = usePartyLeader(partyId)
+  const partyLeader = usePartyLeader(partyMembers)
 
   const kickMember = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     socket.emit(

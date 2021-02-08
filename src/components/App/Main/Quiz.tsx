@@ -17,7 +17,7 @@ export const Quiz = () => {
   const userId = useContext(User)
   const partyId = useContext(Party)
   const partyMembers = usePartyMembers(partyId)
-  const partyLeader = usePartyLeader(partyId)
+  const partyLeader = usePartyLeader(partyMembers)
 
   const [readyPromptOpen, setReadyPromptOpen] = useState(false)
 

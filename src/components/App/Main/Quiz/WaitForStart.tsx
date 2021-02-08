@@ -4,11 +4,13 @@ import { PanaHavingFun } from "svg/PanaHavingFun"
 import { Party } from "contexts/PartyContext"
 import { useChosenOptions } from "hooks/useChosenOptions"
 import { usePartyLeader } from "hooks/usePartyLeader"
+import { usePartyMembers } from "hooks/usePartyMembers"
 import React, { useContext } from "react"
 
 export const WaitForStart = () => {
   const partyId = useContext(Party)
-  const partyLeader = usePartyLeader(partyId)
+  const partyMembers = usePartyMembers(partyId)
+  const partyLeader = usePartyLeader(partyMembers)
 
   const chosenOptions = useChosenOptions()
 
