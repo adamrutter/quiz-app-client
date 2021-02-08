@@ -77,6 +77,23 @@ export const App = () => {
       })
   }, [isLoading, partyLeader, partyMembers, toast])
 
+  // Notify when a user leaves the party
+  useEffect(() => {
+    const listener = (user: UserType) => {
+      if (userId !== user.id && user.name) {
+        toast({
+          description: `${user.name} left the party.`,
+          status: "warning",
+          position: "bottom-right"
+        })
+      }
+    }
+    socket.on("user-leaving-party", listener)
+    return () => {
+      socket.off("user-leaving-party", listener)
+    }
+  }, [socket, toast, userId])
+
   return (
     <>
       <Header />
