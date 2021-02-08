@@ -70,7 +70,7 @@ interface Action {
   type: string
   payload: {
     api?: string | number | undefined
-    human: string | number
+    human: string | number | undefined
   }
 }
 
@@ -198,8 +198,8 @@ export const OptionsForm = () => {
                   dispatch({
                     type: "amount",
                     payload: {
-                      api: parseInt(value.split(".")[0]),
-                      human: parseInt(value.split(".")[0])
+                      api: parseInt(value.split(".")[0]) || undefined,
+                      human: parseInt(value.split(".")[0]) || undefined
                     }
                   })
                 }
@@ -224,8 +224,8 @@ export const OptionsForm = () => {
                   dispatch({
                     type: "time",
                     payload: {
-                      api: parseInt(value.split(".")[0]),
-                      human: parseInt(value.split(".")[0])
+                      api: parseInt(value.split(".")[0]) || undefined,
+                      human: parseInt(value.split(".")[0]) || undefined
                     }
                   })
                 }

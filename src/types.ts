@@ -27,7 +27,7 @@ export interface OpenTriviaDBOptions {
 
 export interface Option {
   api: string | number | undefined
-  human: string | number
+  human: string | number | undefined
 }
 
 export interface Options {
