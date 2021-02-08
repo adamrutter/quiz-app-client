@@ -4,7 +4,12 @@ import { Errors } from "./App/Errors"
 import { Party } from "contexts/PartyContext"
 import { Redirect } from "react-router-dom"
 import { SocketIO } from "contexts/SocketIOContext"
+import { useLoadingState } from "hooks/useLoadingState"
+import { usePartyLeader } from "hooks/usePartyLeader"
+import { usePartyMembers } from "hooks/usePartyMembers"
 import { User } from "contexts/UserContext"
+import { User as UserType } from "types"
+import { useToast } from "@chakra-ui/react"
 import queryString from "query-string"
 import React, { useContext, useEffect } from "react"
 
@@ -12,6 +17,10 @@ export const App = () => {
   const socket = useContext(SocketIO)
   const userId = useContext(User)
   const partyId = useContext(Party)
+  const partyMembers = usePartyMembers(partyId)
+  const partyLeader = usePartyLeader(partyMembers)
+  const isLoading = useLoadingState()
+  const toast = useToast()
 
   const { join: requestedParty } = queryString.parse(window.location.search)
 
@@ -22,8 +31,8 @@ export const App = () => {
 
   // Handle the user being removed from the current party
   useEffect(() => {
-    const listener = (userLeavingId: string) => {
-      if (userId === userLeavingId) window.location.reload()
+    const listener = (user: UserType) => {
+      if (userId === user.id) window.location.reload()
     }
     socket.on("user-leaving-party", listener)
     return () => {
@@ -55,6 +64,18 @@ export const App = () => {
   useEffect(() => {
     window.onunload = () => socket.emit("kick-party-member", userId, partyId)
   })
+
+  // Notify if party leader has left the party
+  useEffect(() => {
+    if (!isLoading && partyMembers && !partyLeader)
+      toast({
+        description:
+          "The party leader has left. Please reload the page or join a new party.",
+        status: "error",
+        duration: null,
+        position: "bottom-right"
+      })
+  }, [isLoading, partyLeader, partyMembers, toast])
 
   return (
     <>
