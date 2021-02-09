@@ -10,16 +10,11 @@ interface Options {
 
 export const useChosenOptions = () => {
   const socket = useContext(SocketIO)
-
   const [options, setOptions] = useState<Options | undefined>()
 
   useEffect(() => {
-    const optionsListener = (options: Options) => {
-      setOptions(options)
-    }
-
+    const optionsListener = (options: Options) => setOptions(options)
     socket.on("options-changed", optionsListener)
-
     return () => {
       socket.off("options-changed", optionsListener)
     }

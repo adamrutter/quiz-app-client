@@ -12,16 +12,12 @@ export interface UserScore {
 export const useScores = () => {
   const socket = useContext(SocketIO)
   const partyId = useContext(Party)
-
   const [scores, setScores] = useState<UserScore[]>()
 
   useEffect(() => {
-    const scoreboardListener = (scorecard: Array<UserScore>) => {
+    const scoreboardListener = (scorecard: Array<UserScore>) =>
       setScores(scorecard)
-    }
-
     socket.on("updated-scorecard", scoreboardListener)
-
     return () => {
       socket.off("updated-scorecard", scoreboardListener)
     }

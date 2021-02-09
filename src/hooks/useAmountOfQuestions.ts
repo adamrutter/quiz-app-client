@@ -7,12 +7,8 @@ export const useAmountOfQuestions = () => {
   const [amountOfQuestions, setAmountOfQuestions] = useState("")
 
   useEffect(() => {
-    const listener = (amount: string) => {
-      setAmountOfQuestions(amount)
-    }
-
+    const listener = (amount: string) => setAmountOfQuestions(amount)
     socket.on("amount-of-questions", listener)
-
     return () => {
       socket.off("amount-of-questions", listener)
     }
