@@ -4,7 +4,7 @@ import { useIsTimeLow } from "hooks/useIsTimeLow"
 import React from "react"
 
 interface Props {
-  amountOfQuestions: string
+  amountOfQuestions: number
   currentQuestionNumber: string
   time: number | undefined
   timeLimit: number | undefined
