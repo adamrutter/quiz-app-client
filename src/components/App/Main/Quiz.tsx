@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Box, Spinner } from "@chakra-ui/react"
+import { Box, Spinner } from "@chakra-ui/react"
 import { Game } from "./Quiz/Game"
 import { OptionsForm } from "./Quiz/OptionsForm"
 import { Party } from "contexts/PartyContext"
