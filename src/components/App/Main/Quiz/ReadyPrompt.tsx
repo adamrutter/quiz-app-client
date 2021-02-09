@@ -49,12 +49,15 @@ export const ReadyPrompt = (props: Props) => {
 
   // Handle user ready, waiting for other users to be ready
   useEffect(() => {
-    const listener = (users: Array<User>) => setUsersReady(users)
+    const listener = (users: Array<User>) => {
+      const thisUserReady = users.find(user => user.id === userId) !== undefined
+      if (thisUserReady) setUsersReady(users)
+    }
     socket.on("these-users-ready", listener)
     return () => {
       socket.off("these-users-ready", listener)
     }
-  }, [socket])
+  }, [socket, userId])
 
   useEffect(() => {
     const listener = (percent: number) => setPercentUsersReady(percent)
@@ -104,7 +107,7 @@ export const ReadyPrompt = (props: Props) => {
                 <Button
                   colorScheme="brand"
                   fontSize="xl"
-                  onClick={() => handleReady(socket, { partyId, userId })}
+                  onClick={() => handleReady(socket, { userId, partyId })}
                   size="lg"
                 >
                   Yes!
