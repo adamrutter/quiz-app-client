@@ -24,11 +24,6 @@ export const App = () => {
 
   const { join: requestedParty } = queryString.parse(window.location.search)
 
-  // Request a user ID
-  useEffect(() => {
-    if (!userId) socket.emit("request-user-id")
-  }, [socket, userId])
-
   // Handle the user being removed from the current party
   useEffect(() => {
     const listener = (user: UserType) => {
