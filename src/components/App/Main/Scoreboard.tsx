@@ -41,7 +41,7 @@ export const Scoreboard = () => {
             return (
               <ListItem
                 bg={indexIsOdd ? oddLineColor : "none"}
-                px={[0, 4]}
+                px={[2, 4]}
                 py={2}
               >
                 <Wrap align="center" justify="space-between">
