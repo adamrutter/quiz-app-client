@@ -47,7 +47,7 @@ export const Scoreboard = () => {
                 <Wrap align="center" justify="space-between">
                   <WrapItem>
                     <UsernameItem
-                      color={index === 0 ? "brand.400" : "gray.500"}
+                      color={!indexIsOdd ? "brand.300" : "gray.500"}
                       fontSize="lg"
                       icon={FaUserAlt}
                       id={user.id}
