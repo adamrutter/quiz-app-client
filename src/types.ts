@@ -4,7 +4,7 @@ export interface Question {
   category: string
   difficulty: string
   number: string
-  total: string
+  total: number
 }
 
 export interface User {

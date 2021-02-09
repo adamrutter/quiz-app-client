@@ -16,7 +16,6 @@ import { Quiz } from "contexts/QuizContext"
 import { SocketIO } from "contexts/SocketIOContext"
 import { User } from "contexts/UserContext"
 import { UserAnsweredNotification } from "./Game/UserAnsweredNotification"
-import { useAmountOfQuestions } from "hooks/useAmountOfQuestions"
 import { useAnswers } from "hooks/useAnswers"
 import { useCorrectAnswer } from "hooks/useCorrectAnswer"
 import { usePartyMembers } from "hooks/usePartyMembers"
@@ -113,7 +112,6 @@ export const Game = () => {
   const currentAnswers = useAnswers()
   const correctAnswer = useCorrectAnswer()
   const timer = useTimer(currentQuestion?.number)
-  const amountOfQuestions = useAmountOfQuestions()
   const usersAnswered = useUsersAnswered()
   const timeLimit = useQuestionTimeLimit()
 
@@ -193,7 +191,7 @@ export const Game = () => {
 
   return (
     <>
-      {currentQuestion && amountOfQuestions && (
+      {currentQuestion && (
         <>
           {partyMembers?.length > 1 && (
             <CollapsibleAlert
@@ -210,7 +208,7 @@ export const Game = () => {
             </CollapsibleAlert>
           )}
           <Header
-            amountOfQuestions={amountOfQuestions}
+            amountOfQuestions={currentQuestion.total}
             currentQuestionNumber={currentQuestion.number}
             time={timer}
             timeLimit={timeLimit}
