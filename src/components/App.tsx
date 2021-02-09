@@ -55,11 +55,6 @@ export const App = () => {
       socket.emit("request-new-party", userId)
   }, [partyId, requestedParty, socket, userId])
 
-  // Remove the user from the party on page unload
-  useEffect(() => {
-    window.onunload = () => socket.emit("kick-party-member", userId, partyId)
-  })
-
   // Notify if party leader has left the party
   useEffect(() => {
     if (!isLoading && partyMembers && !partyLeader)
