@@ -5,7 +5,9 @@ import {
   Heading,
   List,
   ListItem,
-  useColorModeValue
+  useColorModeValue,
+  Wrap,
+  WrapItem
 } from "@chakra-ui/react"
 import { FaUserAlt } from "react-icons/fa"
 import { UsernameItem } from "./shared/UsernameItem"
@@ -37,19 +39,25 @@ export const Scoreboard = () => {
           scores.map((user, index) => {
             const indexIsOdd = Math.abs(index % 2) === 1
             return (
-              <ListItem bg={indexIsOdd ? oddLineColor : "none"} px={4} py={2}>
-                <Flex align="center" justify="space-between">
-                  <UsernameItem
-                    color={index === 0 ? "brand.400" : "gray.500"}
-                    fontSize="lg"
-                    icon={FaUserAlt}
-                    id={user.id}
-                    name={user.name}
-                  />
-                  <Box>
+              <ListItem
+                bg={indexIsOdd ? oddLineColor : "none"}
+                px={[0, 4]}
+                py={2}
+              >
+                <Wrap align="center" justify="space-between">
+                  <WrapItem>
+                    <UsernameItem
+                      color={index === 0 ? "brand.400" : "gray.500"}
+                      fontSize="lg"
+                      icon={FaUserAlt}
+                      id={user.id}
+                      name={user.name}
+                    />
+                  </WrapItem>
+                  <WrapItem flexGrow={2} justifyContent="flex-end">
                     <Flex align="center">
                       {user.answeredCorrectly && (
-                        <Badge colorScheme="green" mx={5} variant="solid">
+                        <Badge colorScheme="green" mx={[2, 5]} variant="solid">
                           Correct!
                         </Badge>
                       )}
@@ -62,8 +70,8 @@ export const Scoreboard = () => {
                         {user.score}
                       </Box>
                     </Flex>
-                  </Box>
-                </Flex>
+                  </WrapItem>
+                </Wrap>
               </ListItem>
             )
           })}
