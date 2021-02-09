@@ -177,7 +177,7 @@ export const Game = () => {
       // Send a notification if the user answering wasn't this user
       if (thisUser.id !== userId) {
         toast({
-          duration: 1500,
+          duration: 1000,
           position: "bottom-right",
           render: () => <UserAnsweredNotification user={thisUser.name} />
         })
