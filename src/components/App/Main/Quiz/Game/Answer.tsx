@@ -15,7 +15,10 @@ export const Answer = (props: Props) => {
     <Button
       colorScheme={props.colorScheme}
       disabled={props.disabled}
+      height="unset"
       onClick={() => props.onClick(props.answerIndex)}
+      py={3}
+      whiteSpace="break-spaces"
     >
       {props.answer}
     </Button>
