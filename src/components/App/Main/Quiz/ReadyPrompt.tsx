@@ -12,7 +12,6 @@ import {
 import { Party } from "contexts/PartyContext"
 import { Socket } from "socket.io-client"
 import { SocketIO } from "contexts/SocketIOContext"
-import { useChosenOptions } from "hooks/useChosenOptions"
 import { User as UserId } from "contexts/UserContext"
 import React, { useContext, useEffect, useState } from "react"
 
@@ -42,10 +41,6 @@ export const ReadyPrompt = (props: Props) => {
 
   const [usersReady, setUsersReady] = useState<Array<User>>([])
   const [percentUsersReady, setPercentUsersReady] = useState(0)
-
-  const chosenOptions = useChosenOptions()
-
-  const randomCategory = chosenOptions?.category === "Random"
 
   // Handle user ready, waiting for other users to be ready
   useEffect(() => {
@@ -86,20 +81,10 @@ export const ReadyPrompt = (props: Props) => {
           <Flex alignItems="center" direction="column" px={0} py={9}>
             {usersReady.length === 0 ? (
               <>
-                <Text textAlign="center">
-                  {chosenOptions?.amount} questions on{" "}
-                  <Text as="span" fontStyle="italic" fontWeight="bold">
-                    {randomCategory
-                      ? "any subject"
-                      : `${chosenOptions?.category}`}
-                  </Text>
-                  ...
-                </Text>
                 <Text
                   fontSize="3xl"
                   fontWeight="bold"
                   mb={4}
-                  mt={3}
                   textAlign="center"
                 >
                   Are you ready?
