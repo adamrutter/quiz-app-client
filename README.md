@@ -1,8 +1,8 @@
-[Server repo can be found here](https://github.com/adamrutter/quiz-app-server).
+*[Server repo can be found here](https://github.com/adamrutter/quiz-app-server).*
 
 # Quiz App
 
-A multiplayer quiz app built made with React and Socket<span>.</span>IO. [You can find a live version of the app here](https://quiz.adamrutter.com).
+A multiplayer quiz app made with React and Socket<span>.</span>IO. [You can find a live version of the app here](https://quiz.adamrutter.com).
 
 ## Technologies used
 
